@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Restaurant extends Base{
+public class Restaurant extends BaseClass {
     private String name;
     private String description;
     private String cuisineType;
@@ -37,6 +37,5 @@ public class Restaurant extends Base{
 
     @OneToMany(mappedBy = "restaurant")
     private List<Order> orders;
-
 
 }

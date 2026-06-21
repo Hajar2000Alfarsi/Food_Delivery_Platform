@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Data
-public class Base {
+public class BaseClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerAddress extends Base{
+public class CustomerAddress extends BaseClass {
     private String street;
     private String city;
     private String building;
