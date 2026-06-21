@@ -26,7 +26,7 @@ public class MenuItem extends BaseClass {
     @ManyToOne
     private Restaurant restaurant;
 
-    @OneToMany(mappedBy = "menuItems")
+    @ManyToMany(mappedBy = "menuItems")
     private List<ComboMeal> comboMeals;
 
     @OneToMany(mappedBy = "menuItems")
