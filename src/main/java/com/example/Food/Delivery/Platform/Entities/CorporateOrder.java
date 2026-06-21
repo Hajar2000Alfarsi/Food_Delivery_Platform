@@ -28,5 +28,5 @@ public class CorporateOrder extends BaseClass{
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "corporateOrder")
-    private List<OrderItem> items;
+    private List<CorporateOrderItem> items;
 }
