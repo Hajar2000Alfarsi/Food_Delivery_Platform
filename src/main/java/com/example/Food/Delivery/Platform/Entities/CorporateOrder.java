@@ -29,4 +29,5 @@ public class CorporateOrder extends BaseClass{
 
     @OneToMany(mappedBy = "corporateOrder")
     private List<CorporateOrderItem> items;
+
 }
