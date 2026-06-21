@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -36,6 +37,9 @@ public class Restaurant extends BaseClass {
     private List<ComboMeal> comboMeals;
 
     @OneToMany(mappedBy = "restaurant")
-    private List<Order> orders;
+    private List<FoodOrder> orders;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<Review> reviews;
 
 }

@@ -22,7 +22,7 @@ public class Delivery extends BaseClass{
     private LocalDateTime deliveredAt;
 
     @OneToOne
-    private Order order;
+    private FoodOrder order;
 
     @ManyToOne
     private DeliveryDriver driver;

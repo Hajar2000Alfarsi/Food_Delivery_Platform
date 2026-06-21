@@ -15,6 +15,6 @@ import java.util.List;
 public class RestaurantOwner extends BaseUser{
     private String businessLicenseCode;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "restaurantOwner")
     private List<Restaurant> restaurants;
 }

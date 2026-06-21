@@ -1,18 +1,18 @@
 package com.example.Food.Delivery.Platform.Entities;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@MappedSuperclass
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseUser extends BaseClass {
     private String firstName;
-    private String secondName;
+    private String lastName;
 
     @Column(unique = true)
     private String email;

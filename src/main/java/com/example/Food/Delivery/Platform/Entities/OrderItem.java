@@ -19,7 +19,7 @@ public class OrderItem extends BaseClass{
     private String specialInstructions;
 
     @ManyToOne
-    private Order order;
+    private FoodOrder order;
 
     @ManyToOne
     private MenuItem menuItem;

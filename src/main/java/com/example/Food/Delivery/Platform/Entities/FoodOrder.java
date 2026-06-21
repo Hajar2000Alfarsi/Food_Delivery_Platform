@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order extends BaseClass{
+public class FoodOrder extends BaseClass{
     private String orderCode;
 
     private LocalDateTime orderDate;

@@ -22,5 +22,5 @@ public class Payment extends BaseClass{
     private LocalDateTime processedAt;
 
     @OneToOne
-    private Order order;
+    private FoodOrder order;
 }

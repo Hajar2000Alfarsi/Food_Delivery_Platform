@@ -25,5 +25,5 @@ public class ComboMeal extends BaseClass{
     private Restaurant restaurant;
 
     @ManyToMany
-    private List<MenuItem> menuItems;
+    private List<MenuItem> menuItem;
 }

@@ -20,7 +20,7 @@ public class Customer extends BaseUser{
     private  List<CustomerAddress> addresses;
 
     @OneToMany(mappedBy = "customer")
-    private  List<Order> orders;
+    private  List<FoodOrder> orders;
 
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;

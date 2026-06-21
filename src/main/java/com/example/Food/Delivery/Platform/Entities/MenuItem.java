@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -26,9 +27,9 @@ public class MenuItem extends BaseClass {
     @ManyToOne
     private Restaurant restaurant;
 
-    @ManyToMany(mappedBy = "menuItems")
+    @ManyToMany(mappedBy = "menuItem")
     private List<ComboMeal> comboMeals;
 
-    @OneToMany(mappedBy = "menuItems")
+    @OneToMany(mappedBy = "menuItem")
     private  List<OrderItem> orderItems;
 }

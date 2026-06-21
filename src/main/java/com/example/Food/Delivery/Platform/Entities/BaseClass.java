@@ -13,18 +13,18 @@ public class BaseClass {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     private Boolean isActive;
 
     @PrePersist
     public void prePersist(){
-        createDate = LocalDateTime.now();
+        createdDate = LocalDateTime.now();
         isActive = true;
     }
 
     @PreUpdate
     public void preUpdate(){
-        updateDate = LocalDateTime.now();
+        updatedDate = LocalDateTime.now();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,7 @@ public class DeliveryDriver extends BaseUser{
 
     @OneToMany(mappedBy = "driver")
     private List<Delivery> deliveries;
+
+    @OneToMany(mappedBy = "deliveryDriver")
+    private List<Review> reviews;
 }
