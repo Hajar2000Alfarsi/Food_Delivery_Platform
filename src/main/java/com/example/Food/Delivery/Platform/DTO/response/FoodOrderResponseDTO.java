@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderResponseDTO {
+public class FoodOrderResponseDTO {
     private Integer id;
     private String orderCode;
     private LocalDateTime orderDate;
@@ -29,9 +29,9 @@ public class OrderResponseDTO {
     private RestaurantSummaryDTO restaurant;
     private List<OrderItemResponseDTO> items;
 
-    public static OrderResponseDTO fromEntity(FoodOrder order) {
+    public static FoodOrderResponseDTO fromEntity(FoodOrder order) {
         if (order == null) return null;
-        OrderResponseDTO dto = new OrderResponseDTO();
+        FoodOrderResponseDTO dto = new FoodOrderResponseDTO();
         dto.setId(order.getId());
         dto.setOrderCode(order.getOrderCode());
         dto.setOrderDate(order.getOrderDate());
