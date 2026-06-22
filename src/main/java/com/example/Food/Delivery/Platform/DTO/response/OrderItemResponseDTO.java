@@ -3,14 +3,13 @@ package com.example.Food.Delivery.Platform.DTO.response;
 import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
 import com.example.Food.Delivery.Platform.Entities.OrderItem;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class OrderItemResponseDTO {
     private Integer id;
     private Integer quantity;

@@ -17,12 +17,5 @@ public class OrderItemRequestDTO {
     @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;
 
-    @NotNull
-    @PositiveOrZero(message = "Unit Price must be positive or zero")
-    private Double unitPrice;
-
-    @PositiveOrZero(message = "Total Price must be positive or zero")
-    private Double totalPrice;
-
     private String specialInstructions;
 }

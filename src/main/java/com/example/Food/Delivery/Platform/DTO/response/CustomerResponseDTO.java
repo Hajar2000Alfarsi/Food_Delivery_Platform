@@ -30,10 +30,10 @@ public class CustomerResponseDTO {
         }
 
         List<CustomerAddressResponseDTO> addressDTOs = null;
-        if (customer.getAddresses() != null) {
+        /*if (customer.getAddresses() != null) {
             addressDTOs = customer.getAddresses().stream().filter(addr -> addr.getIsActive())
                     .map(CustomerAddressResponseDTO::fromEntity).collect(Collectors.toList());
-        }
+        }*/
         return CustomerResponseDTO.builder()
                 .id(customer.getId())
                 .firstName(customer.getFirstName())
