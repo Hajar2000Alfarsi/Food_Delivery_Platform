@@ -24,4 +24,5 @@ public class CorporateOrderRequestDTO {
 
     @NotEmpty(message = "Order must contain items")
     private List<OrderItemRequestDTO> items;
+
 }
