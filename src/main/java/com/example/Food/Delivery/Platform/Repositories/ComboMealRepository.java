@@ -10,5 +10,4 @@ import java.util.List;
 public interface ComboMealRepository extends JpaRepository<ComboMeal, Integer> {
     @Query("select c from ComboMeal c join c.menuItem m where m.id = :menuItemId AND c.isActive = true")
     List<ComboMeal> findByMenuItemId(@Param("menuItemId") Integer menuItemId);
-
 }
