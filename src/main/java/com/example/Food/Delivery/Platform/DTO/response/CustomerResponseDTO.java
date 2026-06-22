@@ -26,7 +26,7 @@ public class CustomerResponseDTO {
 
     public static CustomerResponseDTO fromEntity(Customer customer) {
         if (customer == null) {
-            return null
+            return null;
         }
 
         List<CustomerAddressResponseDTO> addressDTOs = null;
