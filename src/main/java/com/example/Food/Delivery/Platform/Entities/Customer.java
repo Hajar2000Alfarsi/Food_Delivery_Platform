@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -16,12 +17,15 @@ public class Customer extends BaseUser{
     private Integer loyaltyPoints;
     private String customerCode;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer")
     private  List<CustomerAddress> addresses;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer")
     private  List<FoodOrder> orders;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
 
