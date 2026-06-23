@@ -40,7 +40,7 @@ public class CustomerService {
     public CustomerResponseDTO createCustomer(CustomerRequestDTO dto, CustomerAddressRequestDTO initialAddress) {
         String customerCode = HelperUtils.generateCode("CUST");
 
-        Customer customer = dto.toEntity(dto.getPasswordHash(), customerCode);
+        Customer customer = dto.toEntity(customerCode);
 
         customer.setIsActive(true);
         customer.setCreatedDate(LocalDateTime.now());

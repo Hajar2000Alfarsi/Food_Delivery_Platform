@@ -23,13 +23,13 @@ public class CustomerRequestDTO {
     private String email;
 
     @NotBlank(message = "Phone Number required")
-    @Pattern(regexp = "^//+?[0-9]{8,15}$", message = "Phone Number must be between 8 and 15 duguts and can start with +")
+    @Pattern(regexp = "^\\+?[0-9]{8,15}$", message = "Phone Number must be between 8 and 15 duguts and can start with +")
     private String phoneNumber;
 
     @NotBlank(message = "password is required")
     private String passwordHash;
 
-    public Customer toEntity(String passwordHash, String customerCode){
+    public Customer toEntity(String customerCode){
         Customer customer = new Customer();
         customer.setFirstName(firstName);
         customer.setLastName(lastname);
