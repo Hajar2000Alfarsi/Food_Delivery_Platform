@@ -68,15 +68,4 @@ public class HelperUtils {
         // overnight case (e.g. 22:00 - 02:00)
         return now.isAfter(open) || now.isBefore(close);
     }
-
-    public static Customer findActiveCustomer(Integer id) {
-
-        CustomerRepository customerRepository = null;
-
-        return customerRepository.getByActiveId(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Customer not found with id: " + id
-                        ));
-    }
 }
