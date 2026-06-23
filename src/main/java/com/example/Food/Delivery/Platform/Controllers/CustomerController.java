@@ -78,7 +78,7 @@ public class CustomerController {
 
     //add customer address
     @PostMapping("/{id}/addresses")
-    public ResponseEntity<CustomerResponseDTO> addAddress(@PathVariable Integer id, @Valid @RequestBody CustomerAddressRequestDTO dto){
+    public ResponseEntity<CustomerAddressResponseDTO> addAddress(@PathVariable Integer id, @Valid @RequestBody CustomerAddressRequestDTO dto){
 
         return ResponseEntity.ok(customerService.addAddress(id, dto));
     }

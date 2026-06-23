@@ -26,14 +26,12 @@ public class CustomerService {
     private final CustomerAddressRepository customerAddressRepository;
     private final OrderRepository orderRepository;
 
+    @Autowired
     public CustomerService(CustomerRepository customerRepository, CustomerAddressRepository customerAddressRepository, OrderRepository orderRepository) {
         this.customerRepository = customerRepository;
         this.customerAddressRepository = customerAddressRepository;
         this.orderRepository = orderRepository;
     }
-
-    @Autowired
-
 
     //create customer
     public CustomerResponseDTO createCustomer(CustomerRequestDTO dto) {
@@ -78,7 +76,7 @@ public class CustomerService {
 
     }
 
-    public CustomerResponseDTO addAddress(Integer customerId, CustomerAddressRequestDTO addressDTO) {
+    public CustomerAddressResponseDTO addAddress(Integer customerId, CustomerAddressRequestDTO addressDTO) {
         Customer customer = findActiveCustomer(customerId);
 
         CustomerAddress address = addressDTO.toEntity();
@@ -91,7 +89,7 @@ public class CustomerService {
 
         customerAddressRepository.save(address);
 
-        return CustomerResponseDTO.fromEntity(customer);
+        return CustomerAddressResponseDTO.fromEntity(address);
     }
 
     public CustomerResponseDTO updateLoyaltyPoints(Integer customerId, int points) {

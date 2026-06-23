@@ -1,5 +1,7 @@
 package com.example.Food.Delivery.Platform.DTO.request;
 
+import com.example.Food.Delivery.Platform.Entities.Customer;
+import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -33,4 +35,17 @@ public class DriverRequestDTO {
 
     @NotBlank(message = "Vehicle plate number is required")
     private String vehiclePlate;
+
+    public DeliveryDriver toEntity(){
+        DeliveryDriver driver = new DeliveryDriver();
+        driver.setFirstName(firstName);
+        driver.setLastName(lastName);
+        driver.setEmail(email);
+        driver.setPhoneNumber(phone);
+        driver.setPasswordHash(password);
+        driver.setVehicleType(vehicleType);
+        driver.setVehiclePlate(vehiclePlate);
+
+        return driver;
+    }
 }
