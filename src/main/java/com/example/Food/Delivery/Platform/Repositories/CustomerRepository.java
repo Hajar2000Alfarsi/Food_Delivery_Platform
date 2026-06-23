@@ -7,10 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     @Query("select c from Customer c where c.email=:email AND c.isActive=true")
-    Customer findByEmail(@Param("email") String email);
+    Optional<Customer> findByEmail(@Param("email") String email);
 
     @Query("select c from Customer c where c.loyaltyPoints >= :points AND c.isActive = true")
     List<Customer> findByLoyaltyPointsGreaterThanEqual(@Param("points") Integer loyaltyPoints);
@@ -20,6 +21,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
                                             @Param("end") LocalDateTime end);
 
     @Query("select c from Customer c where c.id = :id AND c.isActive = true")
-    Customer getById(@Param("id") String id);
+    Optional<Customer> getByActiveId(@Param("id") Integer id);
 }
 

@@ -1,9 +1,14 @@
 package com.example.Food.Delivery.Platform.Utils;
 
+import com.example.Food.Delivery.Platform.Entities.Customer;
+import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
+import com.example.Food.Delivery.Platform.Repositories.CustomerRepository;
+
 import java.time.LocalTime;
 import java.util.UUID;
 
 public class HelperUtils {
+
     public static String generateCode(String prefix) {
         return generateCode(prefix, 4);
     }
@@ -62,5 +67,16 @@ public class HelperUtils {
 
         // overnight case (e.g. 22:00 - 02:00)
         return now.isAfter(open) || now.isBefore(close);
+    }
+
+    public static Customer findActiveCustomer(Integer id) {
+
+        CustomerRepository customerRepository = null;
+
+        return customerRepository.getByActiveId(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Customer not found with id: " + id
+                        ));
     }
 }

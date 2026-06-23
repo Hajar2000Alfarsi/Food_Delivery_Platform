@@ -2,6 +2,7 @@ package com.example.Food.Delivery.Platform.DTO.request;
 
 import com.example.Food.Delivery.Platform.Entities.CustomerAddress;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class CustomerAddressRequestDTO {
     @NotBlank(message = "Building Information is required")
     private String building;
 
-    @NotBlank(message = "Default status must be specified")
+    @NotNull(message = "Default status must be specified")
     private Boolean isDefault;
 
     public CustomerAddress toEntity(){
