@@ -79,5 +79,10 @@ public class OrderService {
         return FoodOrderResponseDTO.fromEntity(orderRepository.save(foodOrder));
     }
 
+    //find order
+    private FoodOrder findOrder(Integer id) {
+        return orderRepository.findByActiveId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+    }
 
 }
