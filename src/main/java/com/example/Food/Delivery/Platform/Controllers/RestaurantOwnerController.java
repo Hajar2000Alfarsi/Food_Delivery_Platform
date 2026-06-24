@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/owner")
 public class RestaurantOwnerController {
@@ -32,7 +34,12 @@ public class RestaurantOwnerController {
         return ownerService.getOwnerById(id);
     }
 
+    //get all owners
+    @GetMapping
+    public List<RestaurantOwnerResponseDTO> getAllOwners(){
 
+        return ownerService.getAllOwners();
+    }
 
 
 }
