@@ -172,9 +172,7 @@ public class OrderService {
     public void cancelOrder(Integer orderId) {
         FoodOrder order = findOrder(orderId);
 
-        if (order == null) {
-            throw new ResourceNotFoundException("Order not found");
-        } else if (!order.getStatus().equals("PENDING")) {
+        if (!order.getStatus().equals("PENDING")) {
             throw new InvalidOrderStateException("Only PENDING orders can be cancelled");
         }
 
@@ -224,4 +222,17 @@ public class OrderService {
                 .stream().map(FoodOrderResponseDTO::fromEntity).toList();
     }
 
+    //confirm order
+    public FoodOrderResponseDTO confirmOrder(Integer orderId) {
+        FoodOrder order = findOrder(orderId);
+
+         if (!order.getStatus().equals("PENDING")) {
+            throw new InvalidOrderStateException("Only PENDING orders can be confirmed");
+        }
+
+         order.setStatus("CONFIRMED");
+         order.setUpdatedDate(LocalDateTime.now());
+
+         return FoodOrderResponseDTO.fromEntity(orderRepository.save(order));
+    }
 }
