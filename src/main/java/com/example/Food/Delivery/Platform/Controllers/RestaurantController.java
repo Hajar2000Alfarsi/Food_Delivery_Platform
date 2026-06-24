@@ -56,5 +56,10 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.toggleAcceptingOrders(id, accepting));
     }
 
+    //Update fee
+    @PutMapping("/{id}/fee/{newFee}")
+    public ResponseEntity<RestaurantResponseDTO> updateFee(@PathVariable Integer id, @PathVariable double newFee) {
 
+        return ResponseEntity.ok(restaurantService.updateDeliveryFee(id, newFee));
+    }
 }
