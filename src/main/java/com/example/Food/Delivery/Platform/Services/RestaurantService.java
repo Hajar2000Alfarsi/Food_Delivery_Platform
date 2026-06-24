@@ -3,6 +3,8 @@ package com.example.Food.Delivery.Platform.Services;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
+import com.example.Food.Delivery.Platform.Entities.MenuItem;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Entities.RestaurantOwner;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
@@ -108,8 +110,21 @@ public class RestaurantService {
                 .toList();
     }
 
+    //Bulk price increase(Increase the price of all items in menu)
+    public RestaurantSummaryDTO bulkUpdateMenuItemPrices(Integer restaurantId, double percentage) {
 
+        Restaurant restaurant = findActiveRestaurant(restaurantId);
 
+        List<MenuItem> items = menuItemRepository.findByRestaurantId(restaurantId);
 
+        for (MenuItem item : items) {
+            double newPrice = item.getPrice() + (item.getPrice() * percentage / 100);
 
+            item.setPrice(newPrice);
+            item.setUpdatedDate(LocalDateTime.now());
+        }
+        menuItemRepository.saveAll(items);
+
+        return RestaurantSummaryDTO.fromEntity(restaurant);
+    }
 }
