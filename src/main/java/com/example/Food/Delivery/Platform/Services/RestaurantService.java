@@ -29,9 +29,10 @@ public class RestaurantService {
         this.ownerRepository = ownerRepository;
     }
 
+    //Create Restaurant
     public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO dto, Integer ownerId) {
 
-        RestaurantOwner owner = ownerRepository.getById(ownerId)
+        RestaurantOwner owner = ownerRepository.findByActiveId(ownerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
         Restaurant restaurant = dto.toEntity();
@@ -46,6 +47,37 @@ public class RestaurantService {
 
         return RestaurantResponseDTO.fromEntity(saved);
     }
+
+    //Find Active Restaurant
+    private Restaurant findActiveRestaurant(Integer id) {
+
+        return restaurantRepository.findByActiveId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
+    }
+
+    //Toggle accepting orders
+    public RestaurantResponseDTO toggleAcceptingOrders(Integer restaurantId, boolean status) {
+
+        Restaurant restaurant = findActiveRestaurant(restaurantId);
+
+        restaurant.setAcceptingOrders(status);
+        restaurant.setUpdatedDate(LocalDateTime.now());
+
+        return RestaurantResponseDTO.fromEntity(restaurantRepository.save(restaurant));
+    }
+
+    //Update delivery fee
+    public RestaurantResponseDTO updateDeliveryFee(Integer restaurantId, double newFee) {
+
+        Restaurant restaurant = findActiveRestaurant(restaurantId);
+
+        restaurant.setDeliveryFee(newFee);
+        restaurant.setUpdatedDate(LocalDateTime.now());
+
+        return RestaurantResponseDTO.fromEntity(restaurantRepository.save(restaurant));
+    }
+
+
 
 
 }
