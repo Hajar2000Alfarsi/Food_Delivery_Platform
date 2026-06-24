@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.request.DriverRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.response.DeliveryResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverResponseDTO;
 import com.example.Food.Delivery.Platform.Services.DriverService;
 import jakarta.validation.Valid;
@@ -56,6 +57,16 @@ public class DriverController {
         return ResponseEntity.ok(driverService.updateLocation(id, lat, lng));
     }
 
+    //Driver deliveries
+    @GetMapping("/{id}/deliveries")
+    public ResponseEntity<List<DeliveryResponseDTO>> getDeliveries(@PathVariable Integer id) {
+        return ResponseEntity.ok(driverService.getDriverDeliveries(id));
+    }
 
+    //Active delivery
+    @GetMapping("/{id}/deliveries/active")
+    public ResponseEntity<DeliveryResponseDTO> getActiveDelivery(@PathVariable Integer id) {
+        return ResponseEntity.ok(driverService.getActiveDelivery(id));
+    }
 
 }
