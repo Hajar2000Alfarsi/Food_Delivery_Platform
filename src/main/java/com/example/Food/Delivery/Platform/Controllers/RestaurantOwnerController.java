@@ -1,0 +1,30 @@
+package com.example.Food.Delivery.Platform.Controllers;
+
+import com.example.Food.Delivery.Platform.DTO.request.RestaurantOwnerRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.response.RestaurantOwnerResponseDTO;
+import com.example.Food.Delivery.Platform.Services.RestaurantOwnerService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/owner")
+public class RestaurantOwnerController {
+    private final RestaurantOwnerService ownerService;
+
+    @Autowired
+
+    public RestaurantOwnerController(RestaurantOwnerService ownerService) {
+        this.ownerService = ownerService;
+    }
+
+    //create owner
+    @PostMapping
+    public RestaurantOwnerResponseDTO createOwner(@Valid @RequestBody RestaurantOwnerRequestDTO dto){
+
+        return ownerService.createOwner(dto);
+    }
+
+
+
+}
