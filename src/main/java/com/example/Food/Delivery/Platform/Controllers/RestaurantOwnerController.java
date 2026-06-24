@@ -47,5 +47,10 @@ public class RestaurantOwnerController {
         return ownerService.updateOwner(id,dto);
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteOwner(@PathVariable Integer id){
+
+        return ownerService.deleteOwner(id);
+    }
 
 }
