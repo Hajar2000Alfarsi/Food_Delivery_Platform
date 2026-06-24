@@ -49,6 +49,12 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getRestaurantsByCuisine(cuisine));
     }
 
+    //Toggle orders
+    @PutMapping("/{id}/toggle-orders")
+    public ResponseEntity<RestaurantResponseDTO> toggleOrders(@PathVariable Integer id, @RequestParam boolean accepting) {
+
+        return ResponseEntity.ok(restaurantService.toggleAcceptingOrders(id, accepting));
+    }
 
 
 }
