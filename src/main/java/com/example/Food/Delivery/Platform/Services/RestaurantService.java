@@ -176,6 +176,16 @@ public class RestaurantService {
                 new ResourceNotFoundException("Restaurant not found with id: " + id));
     }
 
+    //get combo meal
+    public List<ComboMealResponseDTO> getCombosForRestaurant(Integer restaurantId) {
+
+        findActiveRestaurant(restaurantId);
+
+        return comboMealRepository.findByRestaurantId(restaurantId)
+                .stream()
+                .map(ComboMealResponseDTO::fromEntity)
+                .toList();
+    }
 
 
 

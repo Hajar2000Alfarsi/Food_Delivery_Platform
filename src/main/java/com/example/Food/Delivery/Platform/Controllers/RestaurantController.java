@@ -1,6 +1,8 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Services.RestaurantService;
@@ -62,4 +64,21 @@ public class RestaurantController {
 
         return ResponseEntity.ok(restaurantService.updateDeliveryFee(id, newFee));
     }
+
+    //Get menu
+    @GetMapping("/{id}/menu")
+    public ResponseEntity<List<MenuItemResponseDTO>> getMenu(@PathVariable Integer id) {
+
+        return ResponseEntity.ok(restaurantService.getMenuForRestaurant(id));
+    }
+
+    //get combo meals
+    @GetMapping("/{id}/combos")
+    public ResponseEntity<List<ComboMealResponseDTO>> getCombos(
+            @PathVariable Integer id) {
+
+        return ResponseEntity.ok(restaurantService.getCombosForRestaurant(id));
+    }
+
+
 }
