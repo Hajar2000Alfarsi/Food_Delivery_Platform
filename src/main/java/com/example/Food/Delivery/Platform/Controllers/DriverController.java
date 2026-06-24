@@ -41,5 +41,21 @@ public class DriverController {
         return ResponseEntity.ok(driverService.getOnlineDrivers());
     }
 
+    //Toggle status
+    @PutMapping("/{id}/status")
+    public ResponseEntity<DriverResponseDTO> updateStatus(@PathVariable Integer id, @RequestParam boolean isOnline) {
+        return ResponseEntity.ok(driverService.updateStatus(id, isOnline));
+    }
+
+    //Update location
+    @PutMapping("{id}/location")
+    public ResponseEntity<DriverResponseDTO> updateLocation(
+            @PathVariable Integer id,
+            @RequestParam double lat,
+            @RequestParam double lng){
+        return ResponseEntity.ok(driverService.updateLocation(id, lat, lng));
+    }
+
+
 
 }
