@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
 
     @Query("select m from MenuItem m where m.id = :id AND m.isActive = true")
-    MenuItem findActiveById(@Param("id") Integer id);
+    Optional<MenuItem> findByActiveId(@Param("id") Integer id);
 
     @Query("select m from MenuItem m where m.restaurant.id = :id AND m.isActive = true")
     List<MenuItem> findByRestaurantId(@Param("id") Integer id);

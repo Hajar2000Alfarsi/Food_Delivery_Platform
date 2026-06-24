@@ -141,4 +141,15 @@ public class RestaurantService {
         return MenuItemResponseDTO.fromEntity(menuItemRepository.save(item));
     }
 
+    //Toggle menu item availability
+    public void updateMenuItemAvailability(Integer itemId, boolean status) {
+
+        MenuItem item = menuItemRepository.findByActiveId(itemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu item not found"));
+
+        item.setIsAvailable(status);
+        item.setUpdatedDate(LocalDateTime.now());
+
+        menuItemRepository.save(item);
+    }
 }
