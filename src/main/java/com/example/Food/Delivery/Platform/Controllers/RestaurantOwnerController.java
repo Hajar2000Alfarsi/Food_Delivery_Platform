@@ -41,5 +41,11 @@ public class RestaurantOwnerController {
         return ownerService.getAllOwners();
     }
 
+    @PutMapping("/{id}")
+    public RestaurantOwnerResponseDTO updateOwner(@PathVariable Integer id, @Valid @RequestBody RestaurantOwnerRequestDTO dto){
+
+        return ownerService.updateOwner(id,dto);
+    }
+
 
 }
