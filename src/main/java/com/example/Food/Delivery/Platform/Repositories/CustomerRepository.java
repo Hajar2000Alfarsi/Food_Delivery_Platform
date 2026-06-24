@@ -21,7 +21,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
                                             @Param("end") LocalDateTime end);
 
     @Query("select c from Customer c where c.id = :id AND c.isActive = true")
-    Optional<Customer> getByActiveId(@Param("id") Integer id);
+    Optional<Customer> findByActiveId(@Param("id") Integer id);
 
     @Query("select c from Customer c where c.isActive = true")
     List<Customer> findAllActive();

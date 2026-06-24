@@ -109,7 +109,6 @@ public class RestaurantController {
     @PutMapping("/{id}/bulk-price-increase")
     public ResponseEntity<RestaurantSummaryDTO> bulkIncrease(@PathVariable Integer id, @RequestParam double percentage) {
 
-        restaurantService.bulkUpdateMenuItemPrices(id, percentage);
         return ResponseEntity.ok(restaurantService.bulkUpdateMenuItemPrices(id, percentage));
     }
 

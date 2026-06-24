@@ -71,7 +71,7 @@ public class CustomerService {
     }
 
     private Customer findActiveCustomer(Integer id) {
-        return customerRepository.getByActiveId(id).orElseThrow(() ->
+        return customerRepository.findByActiveId(id).orElseThrow(() ->
                 new ResourceNotFoundException("Customer not found with id: " + id));
 
     }
