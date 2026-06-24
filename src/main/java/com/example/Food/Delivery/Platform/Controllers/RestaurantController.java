@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
+import com.example.Food.Delivery.Platform.DTO.request.ComboMealRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.MenuItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
@@ -94,5 +95,12 @@ public class RestaurantController {
     public ResponseEntity<MenuItemSummaryDTO> updateAvailability(@PathVariable Integer itemId, @RequestParam boolean status) {
 
         return ResponseEntity.ok(restaurantService.updateMenuItemAvailability(itemId, status));
+    }
+
+    //Add combo
+    @PostMapping("/{id}/combos")
+    public ResponseEntity<ComboMealResponseDTO> addCombo(@PathVariable Integer id, @Valid @RequestBody ComboMealRequestDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.addCombo(id, dto));
     }
 }
