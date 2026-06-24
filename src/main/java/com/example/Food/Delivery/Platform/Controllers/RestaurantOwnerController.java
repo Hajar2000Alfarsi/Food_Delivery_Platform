@@ -25,6 +25,14 @@ public class RestaurantOwnerController {
         return ownerService.createOwner(dto);
     }
 
+    //get owner by id
+    @GetMapping("/{id}")
+    public RestaurantOwnerResponseDTO getOwnerById(@PathVariable Integer id){
+
+        return ownerService.getOwnerById(id);
+    }
+
+
 
 
 }
