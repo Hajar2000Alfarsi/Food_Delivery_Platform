@@ -7,6 +7,7 @@ import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
+import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Services.RestaurantService;
 import jakarta.validation.Valid;
@@ -97,10 +98,19 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.updateMenuItemAvailability(itemId, status));
     }
 
-    //Add combo
+    //Add combo meal
     @PostMapping("/{id}/combos")
     public ResponseEntity<ComboMealResponseDTO> addCombo(@PathVariable Integer id, @Valid @RequestBody ComboMealRequestDTO dto) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.addCombo(id, dto));
     }
+
+    //Bulk price increase
+    @PutMapping("/{id}/bulk-price-increase")
+    public ResponseEntity<RestaurantSummaryDTO> bulkIncrease(@PathVariable Integer id, @RequestParam double percentage) {
+
+        restaurantService.bulkUpdateMenuItemPrices(id, percentage);
+        return ResponseEntity.ok(restaurantService.bulkUpdateMenuItemPrices(id, percentage));
+    }
+
 }
