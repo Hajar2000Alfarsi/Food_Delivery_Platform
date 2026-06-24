@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.DTO.request;
 
+import com.example.Food.Delivery.Platform.Entities.CorporateOrder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -25,4 +26,11 @@ public class CorporateOrderRequestDTO {
     @NotEmpty(message = "Order must contain items")
     private List<OrderItemRequestDTO> items;
 
+    public CorporateOrder toEntity(){
+        CorporateOrder corporateOrder = new CorporateOrder();
+        corporateOrder.setCompanyName(companyName);
+        corporateOrder.setCostCenter(costCenter);
+
+        return corporateOrder;
+    }
 }

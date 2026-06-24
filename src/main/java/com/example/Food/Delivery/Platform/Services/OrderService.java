@@ -1,6 +1,8 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.request.CorporateOrderRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.OrderItemRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.response.CorporateOrderResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.FoodOrderResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.OrderItemResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.*;
@@ -22,6 +24,16 @@ public class OrderService {
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
     private final OrderItemRepository orderItemRepository;
+    private CorporateOrderRepository corporateOrderRepository;
+
+    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, OrderItemRepository orderItemRepository, CorporateOrderRepository corporateOrderRepository) {
+        this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
+        this.restaurantRepository = restaurantRepository;
+        this.menuItemRepository = menuItemRepository;
+        this.orderItemRepository = orderItemRepository;
+        this.corporateOrderRepository = corporateOrderRepository;
+    }
 
     @Autowired
     public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, OrderItemRepository orderItemRepository) {
@@ -118,6 +130,9 @@ public class OrderService {
                                         Integer orderItemId) {
 
         FoodOrder order = findOrder(orderId);
+        if (order == null) {
+            throw new ResourceNotFoundException("Order not found");
+        }
 
         OrderItem item = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
@@ -125,4 +140,88 @@ public class OrderService {
         item.setIsActive(false);
         orderItemRepository.save(item);
     }
+
+    //Apply discount
+    public FoodOrderResponseDTO applyDiscount(Integer orderId, double discount){
+        FoodOrder order = findOrder(orderId);
+
+        if (order == null) {
+            throw new ResourceNotFoundException("Order not found");
+        }
+
+        order.setDiscountAmount(discount);
+
+        return FoodOrderResponseDTO.fromEntity(orderRepository.save(order));
+    }
+
+
+    //Update status
+    public FoodOrderResponseDTO updateOrderStatus(Integer orderId, String newStatus){
+        FoodOrder order = findOrder(orderId);
+
+        if (order == null) {
+            throw new ResourceNotFoundException("Order not found");
+        }
+
+        order.setStatus(newStatus);
+
+        return FoodOrderResponseDTO.fromEntity(orderRepository.save(order));
+    }
+
+    //CancelOrder
+    public void cancelOrder(Integer orderId) {
+        FoodOrder order = findOrder(orderId);
+
+        if (order == null) {
+            throw new ResourceNotFoundException("Order not found");
+        } else if (!order.getStatus().equals("PENDING")) {
+            throw new InvalidOrderStateException("Only PENDING orders can be cancelled");
+        }
+
+        order.setStatus("CANCELLED");
+
+        orderRepository.save(order);
+    }
+
+    //CALCULATE TOTALS
+    public FoodOrderResponseDTO calculateOrderTotals(Integer orderId){
+        FoodOrder order = findOrder(orderId);
+
+        if (order == null) {
+            throw new ResourceNotFoundException("Order not found");
+        }
+
+        double subtotal = order.getOrderItems().stream().mapToDouble(OrderItem::getTotalPrice).sum();
+
+        double total = subtotal + order.getDeliveryFee() - order.getDiscountAmount();
+
+        order.setSubtotal(subtotal);
+        order.setTotalAmount(total);
+
+        return FoodOrderResponseDTO.fromEntity(orderRepository.save(order));
+    }
+
+    //Corporate Order(add corporate order)
+    public CorporateOrderResponseDTO placeCorporateOrder(CorporateOrderRequestDTO dto) {
+        Restaurant restaurant = restaurantRepository.findByActiveId(dto.getRestaurantId())
+                .orElseThrow(()->new ResourceNotFoundException("Restaurant not found"));
+
+        CorporateOrder order = dto.toEntity();
+
+        order.setRestaurant(restaurant);
+
+        return CorporateOrderResponseDTO.fromEntity(corporateOrderRepository.save(order));
+    }
+
+    //Get Order By ID
+    public FoodOrderResponseDTO getOrderById(Integer orderId) {
+        return FoodOrderResponseDTO.fromEntity(findOrder(orderId));
+    }
+
+    //restaurant order
+    public List<FoodOrderResponseDTO> getOrdersByRestaurant(Integer restaurantId, String status) {
+        return orderRepository.findByRestaurantIdAndStatus(restaurantId, status)
+                .stream().map(FoodOrderResponseDTO::fromEntity).toList();
+    }
+
 }

@@ -70,12 +70,14 @@ public class CustomerService {
         return CustomerResponseDTO.fromEntity(customer);
     }
 
+    //Find Active customer
     private Customer findActiveCustomer(Integer id) {
         return customerRepository.findByActiveId(id).orElseThrow(() ->
                 new ResourceNotFoundException("Customer not found with id: " + id));
 
     }
 
+    //Add customer address
     public CustomerAddressResponseDTO addAddress(Integer customerId, CustomerAddressRequestDTO addressDTO) {
         Customer customer = findActiveCustomer(customerId);
 
@@ -92,6 +94,7 @@ public class CustomerService {
         return CustomerAddressResponseDTO.fromEntity(address);
     }
 
+    //update loyalty points (add)
     public CustomerResponseDTO updateLoyaltyPoints(Integer customerId, int points) {
         Customer customer = findActiveCustomer(customerId);
 
@@ -102,6 +105,7 @@ public class CustomerService {
         return CustomerResponseDTO.fromEntity(customerRepository.save(customer));
     }
 
+    //apply loyalty penalty (subtract)
     public CustomerResponseDTO applyLoyaltyPenalty(Integer customerId, int pointsDeducted) {
 
         Customer customer = findActiveCustomer(customerId);
