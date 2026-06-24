@@ -4,6 +4,7 @@ import com.example.Food.Delivery.Platform.DTO.request.OrderItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.FoodOrderResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.OrderItemResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.*;
+import com.example.Food.Delivery.Platform.Exceptions.InvalidOrderStateException;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
 import com.example.Food.Delivery.Platform.Repositories.*;
 import com.example.Food.Delivery.Platform.Utils.HelperUtils;
@@ -85,4 +86,43 @@ public class OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
+
+    //ADD ITEM
+    public FoodOrderResponseDTO addMenuItemToOrder(Integer orderId,
+                                                   Integer menuItemId,
+                                                   int quantity) {
+
+        FoodOrder order = findOrder(orderId);
+
+        if (!order.getStatus().equals("PENDING")) {
+            throw new InvalidOrderStateException("Cannot modify order");
+        }
+
+        MenuItem menuItem = menuItemRepository.findById(menuItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu item not found"));
+
+        OrderItem item = new OrderItem();
+        item.setOrder(order);
+        item.setMenuItem(menuItem);
+        item.setQuantity(quantity);
+        item.setUnitPrice(menuItem.getPrice());
+        item.setTotalPrice(menuItem.getPrice() * quantity);
+
+        order.getOrderItems().add(item);
+
+        return FoodOrderResponseDTO.fromEntity(orderRepository.save(order));
+    }
+
+    //REMOVE ITEM (soft delete)
+    public void removeMenuItemFromOrder(Integer orderId,
+                                        Integer orderItemId) {
+
+        FoodOrder order = findOrder(orderId);
+
+        OrderItem item = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
+
+        item.setIsActive(false);
+        orderItemRepository.save(item);
+    }
 }
