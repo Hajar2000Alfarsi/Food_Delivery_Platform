@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Entities.RestaurantOwner;
@@ -95,6 +96,18 @@ public class RestaurantService {
                 .map(RestaurantResponseDTO::fromEntity)
                 .toList();
     }
+
+    //Get restaurant menu
+    public List<MenuItemResponseDTO> getMenuForRestaurant(Integer restaurantId) {
+
+        findActiveRestaurant(restaurantId);
+
+        return menuItemRepository.findByRestaurantId(restaurantId)
+                .stream()
+                .map(MenuItemResponseDTO::fromEntity)
+                .toList();
+    }
+
 
 
 
