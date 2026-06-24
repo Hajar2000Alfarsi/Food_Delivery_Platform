@@ -6,6 +6,7 @@ import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
 import com.example.Food.Delivery.Platform.Entities.ComboMeal;
 import com.example.Food.Delivery.Platform.Entities.MenuItem;
@@ -145,7 +146,7 @@ public class RestaurantService {
     }
 
     //Toggle menu item availability
-    public void updateMenuItemAvailability(Integer itemId, boolean status) {
+    public MenuItemSummaryDTO updateMenuItemAvailability(Integer itemId, boolean status) {
 
         MenuItem item = menuItemRepository.findByActiveId(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu item not found"));
@@ -153,7 +154,9 @@ public class RestaurantService {
         item.setIsAvailable(status);
         item.setUpdatedDate(LocalDateTime.now());
 
-        menuItemRepository.save(item);
+        MenuItem saved = menuItemRepository.save(item);
+
+        return MenuItemSummaryDTO.fromEntity(saved);
     }
 
     //Add Combo

@@ -5,6 +5,7 @@ import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Services.RestaurantService;
 import jakarta.validation.Valid;
@@ -88,5 +89,10 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.addMenuItem(id, dto));
     }
 
+    //Update menu availability
+    @PutMapping("/menu/{itemId}/available")
+    public ResponseEntity<MenuItemSummaryDTO> updateAvailability(@PathVariable Integer itemId, @RequestParam boolean status) {
 
+        return ResponseEntity.ok(restaurantService.updateMenuItemAvailability(itemId, status));
+    }
 }
