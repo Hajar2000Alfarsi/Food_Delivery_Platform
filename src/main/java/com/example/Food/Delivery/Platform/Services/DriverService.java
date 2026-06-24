@@ -3,6 +3,7 @@ package com.example.Food.Delivery.Platform.Services;
 import com.example.Food.Delivery.Platform.DTO.request.DriverRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DeliveryResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverResponseDTO;
+import com.example.Food.Delivery.Platform.Entities.Delivery;
 import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
 import com.example.Food.Delivery.Platform.Repositories.DeliveryRepository;
@@ -98,7 +99,8 @@ public class DriverService {
 
         findActiveDriver(id);
 
-        DeliveryDriver delivery = deliveryRepository.findByDriverId(id);
+        Delivery delivery = deliveryRepository.findActiveByDriverId(id).orElseThrow(()->
+                new ResourceNotFoundException("No active delivery found"));
 
         if (delivery == null) {
             throw new ResourceNotFoundException("No active delivery found");
