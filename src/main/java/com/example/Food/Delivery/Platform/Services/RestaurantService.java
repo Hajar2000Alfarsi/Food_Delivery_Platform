@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class RestaurantService {
@@ -75,6 +76,24 @@ public class RestaurantService {
         restaurant.setUpdatedDate(LocalDateTime.now());
 
         return RestaurantResponseDTO.fromEntity(restaurantRepository.save(restaurant));
+    }
+
+    //Get by cuisine type
+    public List<RestaurantResponseDTO> getRestaurantsByCuisine(String cuisine) {
+
+        return restaurantRepository.findByCuisineTypeIgnoreCase(cuisine)
+                .stream()
+                .map(RestaurantResponseDTO::fromEntity)
+                .toList();
+    }
+
+    //Under delivery fee
+    public List<RestaurantResponseDTO> getRestaurantsUnderDeliveryFee(double maxFee) {
+
+        return restaurantRepository.findByDeliveryFeeLessThanEqual(maxFee)
+                .stream()
+                .map(RestaurantResponseDTO::fromEntity)
+                .toList();
     }
 
 
