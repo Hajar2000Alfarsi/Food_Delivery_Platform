@@ -8,6 +8,7 @@ import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
 import com.example.Food.Delivery.Platform.Repositories.DeliveryRepository;
 import com.example.Food.Delivery.Platform.Repositories.DriverRepository;
+import com.example.Food.Delivery.Platform.Utils.HelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,9 @@ public class DriverService {
     //Register Driver
     public DriverResponseDTO createDriver(DriverRequestDTO dto){
         DeliveryDriver driver = dto.toEntity();
+
+        String driverCode = HelperUtils.generateCode("DRV");
+        driver.setDriverCode(driverCode);
 
         driver.setIsOnline(false);
         driver.setCreatedDate(LocalDateTime.now());
