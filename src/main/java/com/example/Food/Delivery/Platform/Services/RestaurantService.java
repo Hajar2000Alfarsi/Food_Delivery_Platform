@@ -1,10 +1,13 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.request.ComboMealRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.MenuItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
+import com.example.Food.Delivery.Platform.Entities.ComboMeal;
 import com.example.Food.Delivery.Platform.Entities.MenuItem;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Entities.RestaurantOwner;
@@ -152,4 +155,29 @@ public class RestaurantService {
 
         menuItemRepository.save(item);
     }
+
+    //Add Combo
+    public ComboMealResponseDTO addCombo(Integer restaurantId, ComboMealRequestDTO dto) {
+
+        Restaurant restaurant = findActiveRestaurant(restaurantId);
+
+        ComboMeal combo = dto.toEntity();
+        combo.setRestaurant(restaurant);
+
+        return ComboMealResponseDTO.fromEntity(comboMealRepository.save(combo));
+    }
+
+    public List<RestaurantResponseDTO> getAllRestaurant() {
+        return restaurantRepository.findAllActive().stream().map(RestaurantResponseDTO::fromEntity).toList();
+    }
+
+    public RestaurantResponseDTO findRestaurantByActiveID(Integer id){
+        return restaurantRepository.findByActiveIdDTO(id).orElseThrow(()->
+                new ResourceNotFoundException("Restaurant not found with id: " + id));
+    }
+
+
+
+
+
 }

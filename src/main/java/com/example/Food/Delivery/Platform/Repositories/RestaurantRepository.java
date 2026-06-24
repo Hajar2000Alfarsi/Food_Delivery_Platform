@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Repositories;
 
+import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,10 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     @Query("select r from Restaurant r where r.id = :id AND r.isActive = true")
     Optional<Restaurant> findByActiveId(@Param("id") Integer id);
+
+    @Query("select r from Restaurant r where r.isActive = true")
+    List<Restaurant> findAllActive();
+
+    @Query("select r from Restaurant r where r.id = :id AND r.isActive = true")
+    Optional<RestaurantResponseDTO> findByActiveIdDTO(@Param("id") Integer id);
 }
