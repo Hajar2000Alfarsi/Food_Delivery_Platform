@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.request.MenuItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
@@ -127,4 +128,17 @@ public class RestaurantService {
 
         return RestaurantSummaryDTO.fromEntity(restaurant);
     }
+
+    //Add Menu Item
+    public MenuItemResponseDTO addMenuItem(Integer restaurantId, MenuItemRequestDTO dto) {
+
+        Restaurant restaurant = findActiveRestaurant(restaurantId);
+
+        MenuItem item = dto.toEntity();
+        item.setRestaurant(restaurant);
+        item.setIsAvailable(true);
+
+        return MenuItemResponseDTO.fromEntity(menuItemRepository.save(item));
+    }
+
 }
