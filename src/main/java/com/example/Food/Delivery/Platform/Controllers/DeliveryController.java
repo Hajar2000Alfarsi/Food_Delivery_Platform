@@ -40,4 +40,10 @@ public class DeliveryController {
     public ResponseEntity<DeliveryResponseDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(deliveryService.getDeliveryById(id));
     }
+
+    // Pickup
+    @PutMapping("/{id}/pickup")
+    public ResponseEntity<DeliveryResponseDTO> pickup(@PathVariable Integer id) {
+        return ResponseEntity.ok(deliveryService.markDeliveryPickedUp(id));
+    }
 }
