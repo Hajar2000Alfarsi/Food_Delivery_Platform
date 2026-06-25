@@ -102,8 +102,12 @@ public class DeliveryService {
 
     //Get driver deliveries
     public List<DeliveryResponseDTO>  getDeliveriesForDriver(Integer driverId, String status) {
+    List<Delivery> deliveries = (status == null) ? deliveryRepository.findByActiveDriverId(driverId) : deliveryRepository.findByDriverIdAndStatus(driverId, status);
 
+    return deliveries.stream().map(DeliveryResponseDTO::fromEntity).toList();
     }
+
+
 
 
 }
