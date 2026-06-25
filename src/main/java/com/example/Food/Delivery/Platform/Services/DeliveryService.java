@@ -107,6 +107,17 @@ public class DeliveryService {
     return deliveries.stream().map(DeliveryResponseDTO::fromEntity).toList();
     }
 
+    //toggle driver online
+    public DriverResponseDTO toggleDriverOnlineStatus(Integer driverId, boolean isOnline){
+        DeliveryDriver driver = driverRepository.findByActiveID(driverId)
+                .orElseThrow(()-> new ResourceNotFoundException("Driver not found"));
+
+        driver.setIsOnline(isOnline);
+        driver.setUpdatedDate(LocalDateTime.now());
+
+        return DriverResponseDTO.fromEntity(driverRepository.save(driver));
+    }
+
 
 
 
