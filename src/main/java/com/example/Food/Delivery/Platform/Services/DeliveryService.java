@@ -45,4 +45,22 @@ public class DeliveryService {
 
         return DeliveryResponseDTO.fromEntity(deliveryRepository.save(delivery));
     }
+
+    //Auto assign driver (first online available)
+    public DeliveryResponseDTO autoAssignDriver(Integer orderId){
+        FoodOrder order = orderRepository.findByActiveId(orderId).orElseThrow(()->
+                new ResourceNotFoundException("Order not Found"));
+        DeliveryDriver driver = driverRepository.findFirstByIsOnlineTrueAndIsActiveTrue().orElseThrow(()->
+                new ResourceNotFoundException("Driver not found"));
+
+        Delivery delivery = new Delivery();
+        delivery.setTrackingCode(HelperUtils.generateCode("DEL"));
+        delivery.setOrder(order);
+        delivery.setDriver(driver);
+        delivery.setStatus("ASSIGNED");
+        delivery.setAssignedAt(LocalDateTime.now());
+        delivery.setIsActive(true);
+
+        return DeliveryResponseDTO.fromEntity(deliveryRepository.save(delivery));
+    }
 }

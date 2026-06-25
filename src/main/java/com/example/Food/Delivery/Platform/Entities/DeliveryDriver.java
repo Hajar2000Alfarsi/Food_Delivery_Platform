@@ -26,6 +26,6 @@ public class DeliveryDriver extends BaseUser{
     @OneToMany(mappedBy = "driver")
     private List<Delivery> deliveries;
 
-    @OneToMany(mappedBy = "deliveryDriver")
+    @OneToMany(mappedBy = "driver")
     private List<Review> reviews;
 }

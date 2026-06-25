@@ -18,4 +18,5 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
 
     @Query("select d from Delivery d where d.driver.id = :driverId AND d.status = 'IN_PROGRESS' AND d.isActive = true")
     Optional<Delivery> findActiveByDriverId(@Param("driverId") Integer id);
+
 }
