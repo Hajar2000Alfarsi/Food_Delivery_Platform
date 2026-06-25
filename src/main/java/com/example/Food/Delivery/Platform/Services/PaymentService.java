@@ -74,4 +74,13 @@ public class PaymentService {
         return PaymentResponseDTO.fromEntity(paymentRepository.save(payment));
     }
 
+    //Get Payment By Order
+    public PaymentResponseDTO getPaymentByOrder(Integer orderId) {
+
+        Payment payment = paymentRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
+
+        return PaymentResponseDTO.fromEntity(payment);
+    }
+
 }
