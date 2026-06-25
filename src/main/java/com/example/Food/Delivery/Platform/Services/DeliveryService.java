@@ -94,7 +94,7 @@ public class DeliveryService {
         Delivery delivery = deliveryRepository.findByActiveId(deliveryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Delivery not found"));
 
-        delivery.setStatus("DELIVERED");
+        delivery.setStatus("DELIVERED(COMPLETE)");
         delivery.setPickedUpAt(LocalDateTime.now());
 
         return DeliveryResponseDTO.fromEntity(deliveryRepository.save(delivery));
