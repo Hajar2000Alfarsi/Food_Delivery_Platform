@@ -85,6 +85,7 @@ public class DeliveryService {
 
         delivery.setStatus("PICKED_UP");
         delivery.setPickedUpAt(LocalDateTime.now());
+        delivery.setDeliveredAt(LocalDateTime.now());
 
         return DeliveryResponseDTO.fromEntity(deliveryRepository.save(delivery));
     }
@@ -94,7 +95,7 @@ public class DeliveryService {
         Delivery delivery = deliveryRepository.findByActiveId(deliveryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Delivery not found"));
 
-        delivery.setStatus("DELIVERED(COMPLETE)");
+        delivery.setStatus("DELIVERED");
         delivery.setPickedUpAt(LocalDateTime.now());
 
         return DeliveryResponseDTO.fromEntity(deliveryRepository.save(delivery));
@@ -121,7 +122,7 @@ public class DeliveryService {
     //Get delivery by id
     public DeliveryResponseDTO getDeliveryById(Integer id) {
 
-        Delivery delivery = deliveryRepository.findById(id)
+        Delivery delivery = deliveryRepository.findByActiveId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Delivery not found"));
 
         return DeliveryResponseDTO.fromEntity(delivery);

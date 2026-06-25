@@ -26,5 +26,5 @@ public class Review extends BaseClass{
     private Restaurant restaurant;
 
     @ManyToOne(optional = true)
-    private DeliveryDriver deliveryDriver;
+    private DeliveryDriver driver;
 }
