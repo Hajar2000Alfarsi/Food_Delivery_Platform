@@ -2,6 +2,7 @@ package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.response.ReviewResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.Customer;
+import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Entities.Review;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
@@ -45,6 +46,27 @@ public class ReviewService {
         review.setRating(rating);
         review.setComment(comment);
         review.setTargetType("RESTAURANT");
+        review.setCreatedAt(LocalDateTime.now());
+        review.setIsActive(true);
+
+        return ReviewResponseDTO.fromEntity(reviewRepository.save(review));
+    }
+
+    //DRIVER REVIEW
+    public ReviewResponseDTO leaveDriverReview(Integer customerId, Integer driverId, int rating, String comment) {
+        Customer customer = customerRepository.findByActiveId(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+
+        DeliveryDriver driver = driverRepository.findByActiveID(driverId)
+                .orElseThrow(() -> new ResourceNotFoundException("Driver not found"));
+
+        Review review = new Review();
+
+        review.setCustomer(customer);
+        review.setDriver(driver);
+        review.setRating(rating);
+        review.setComment(comment);
+        review.setTargetType("DRIVER");
         review.setCreatedAt(LocalDateTime.now());
         review.setIsActive(true);
 
