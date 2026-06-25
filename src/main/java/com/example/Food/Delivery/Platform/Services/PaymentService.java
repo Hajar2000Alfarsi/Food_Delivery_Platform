@@ -63,5 +63,15 @@ public class PaymentService {
         return PaymentResponseDTO.fromEntity(paymentRepository.save(payment));
     }
 
+    //Complete Payment
+    public PaymentResponseDTO completePayment(Integer paymentId) {
+        Payment payment = findPayment(paymentId);
+
+        payment.setStatus("COMPLETED");
+        payment.setProcessedAt(LocalDateTime.now());
+        payment.setUpdatedDate(LocalDateTime.now());
+
+        return PaymentResponseDTO.fromEntity(paymentRepository.save(payment));
+    }
 
 }
