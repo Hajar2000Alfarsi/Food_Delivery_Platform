@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/deliveries")
 public class DeliveryController {
@@ -53,5 +55,10 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryService.markDeliveryDelivered(id));
     }
 
+    // By status
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<DeliveryResponseDTO>> getByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(deliveryService.getDeliveriesByStatus(status));
+    }
 
 }
