@@ -118,7 +118,21 @@ public class DeliveryService {
         return DriverResponseDTO.fromEntity(driverRepository.save(driver));
     }
 
+    //Get delivery by id
+    public DeliveryResponseDTO getDeliveryById(Integer id) {
 
+        Delivery delivery = deliveryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Delivery not found"));
 
+        return DeliveryResponseDTO.fromEntity(delivery);
+    }
+
+    //Get by status
+    public List<DeliveryResponseDTO> getDeliveriesByStatus(String status) {
+
+        return deliveryRepository.findByStatus(status).stream()
+                .map(DeliveryResponseDTO::fromEntity)
+                .toList();
+    }
 
 }
