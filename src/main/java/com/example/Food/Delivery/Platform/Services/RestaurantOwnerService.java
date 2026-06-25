@@ -6,6 +6,7 @@ import com.example.Food.Delivery.Platform.Entities.RestaurantOwner;
 import com.example.Food.Delivery.Platform.Exceptions.DuplicateResourceException;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
 import com.example.Food.Delivery.Platform.Repositories.RestaurantOwnerRepository;
+import com.example.Food.Delivery.Platform.Utils.HelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +25,9 @@ public class RestaurantOwnerService {
     //create owner
     public RestaurantOwnerResponseDTO createOwner(RestaurantOwnerRequestDTO dto){
 
-        ownerRepository.getByEmail(dto.getEmail()).orElseThrow(()->
-            new DuplicateResourceException("Email already exists"));
+        if (ownerRepository.getByEmail(dto.getEmail()).isPresent()){
+             throw new DuplicateResourceException("Email already exists");
+        }
 
         RestaurantOwner owner = new RestaurantOwner();
 
@@ -36,7 +38,7 @@ public class RestaurantOwnerService {
 
         owner.setPasswordHash(dto.getPassword());
 
-        owner.setBusinessLicenseCode(dto.getBusinessLicenseCode());
+        owner.setBusinessLicenseCode(HelperUtils.generateCode("OWNER"));
 
         RestaurantOwner saved = ownerRepository.save(owner);
 

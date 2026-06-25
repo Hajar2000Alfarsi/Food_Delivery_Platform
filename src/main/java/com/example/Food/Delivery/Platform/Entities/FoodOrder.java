@@ -1,9 +1,6 @@
 package com.example.Food.Delivery.Platform.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +32,7 @@ public class FoodOrder extends BaseClass{
     @ManyToOne
     private Restaurant restaurant;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
     @OneToOne(mappedBy = "order")

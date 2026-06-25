@@ -23,10 +23,10 @@ public class RestaurantRequestDTO {
     @NotBlank(message = "Cuisine type is required")
     private String cuisineType;
 
-    @NotBlank(message = "Opening time is required (HH:mm)")
+    @NotNull(message = "Opening time is required")
     private LocalTime openingTime;
 
-    @NotBlank(message = "Closing time is required (HH:mm)")
+    @NotNull(message = "Closing time is required")
     private LocalTime closingTime;
 
     @NotNull(message = "Minimum order amount is required")

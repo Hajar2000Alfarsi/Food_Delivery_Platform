@@ -13,14 +13,14 @@ public interface RestaurantOwnerRepository extends JpaRepository<RestaurantOwner
     Optional<RestaurantOwner> findByActiveId(@Param("id") Integer id);
 
     @Query("SELECT o FROM RestaurantOwner o WHERE o.email = :email AND o.isActive = true ")
-    Optional<RestaurantOwner> getByEmail(String email);
+    Optional<RestaurantOwner> getByEmail(@Param("email") String email);
 
     @Query("SELECT o FROM RestaurantOwner o where o.isActive = true")
     List<RestaurantOwner> getAllOwners();
 
     @Query("SELECT o FROM RestaurantOwner o WHERE o.id = :id AND o.isActive = true")
-    Optional<RestaurantOwner> getOwnerById(Integer id);
+    Optional<RestaurantOwner> getOwnerById(@Param("id") Integer id);
 
     @Query("SELECT o FROM RestaurantOwner o WHERE o.businessLicenseCode = :license AND o.isActive = true")
-    Optional<RestaurantOwner> getByLicense(String license);
+    Optional<RestaurantOwner> getByLicense(@Param("license") String license);
 }

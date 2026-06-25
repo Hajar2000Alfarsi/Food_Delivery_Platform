@@ -26,6 +26,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private CorporateOrderRepository corporateOrderRepository;
 
+    @Autowired
     public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, OrderItemRepository orderItemRepository, CorporateOrderRepository corporateOrderRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
@@ -33,15 +34,6 @@ public class OrderService {
         this.menuItemRepository = menuItemRepository;
         this.orderItemRepository = orderItemRepository;
         this.corporateOrderRepository = corporateOrderRepository;
-    }
-
-    @Autowired
-    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, OrderItemRepository orderItemRepository) {
-        this.orderRepository = orderRepository;
-        this.customerRepository = customerRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.menuItemRepository = menuItemRepository;
-        this.orderItemRepository = orderItemRepository;
     }
 
     //create Order if there is no notes
@@ -72,7 +64,9 @@ public class OrderService {
         foodOrder.setCustomer(customer);
         foodOrder.setRestaurant(restaurant);
 
+        //create order items list
         List<OrderItem> orderItems = new ArrayList<>();
+        double subtotal = 0.0;
 
         for (OrderItemRequestDTO dto : items){
             MenuItem menuItem = menuItemRepository.findByActiveId(dto.getMenuItemId())
@@ -82,13 +76,23 @@ public class OrderService {
             item.setMenuItem(menuItem);
             item.setQuantity(dto.getQuantity());
             item.setUnitPrice(menuItem.getPrice());
-            item.setTotalPrice(menuItem.getPrice() * dto.getQuantity());
+            double totalPrice  = menuItem.getPrice() * dto.getQuantity();
+            item.setTotalPrice(totalPrice);
             item.setOrder(foodOrder);
 
             orderItems.add(item);
+
+            subtotal += totalPrice;
         }
 
         foodOrder.setOrderItems(orderItems);
+
+
+        foodOrder.setSubtotal(subtotal);
+        foodOrder.setDeliveryFee(restaurant.getDeliveryFee() != null ? restaurant.getDeliveryFee() : 0.0);
+        foodOrder.setDiscountAmount(0.0);
+        foodOrder.setTotalAmount(subtotal + (restaurant.getDeliveryFee() != null ? restaurant.getDeliveryFee() : 0.0));
+
         return FoodOrderResponseDTO.fromEntity(orderRepository.save(foodOrder));
     }
 
@@ -114,13 +118,32 @@ public class OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Menu item not found"));
 
         OrderItem item = new OrderItem();
-        item.setOrder(order);
         item.setMenuItem(menuItem);
         item.setQuantity(quantity);
         item.setUnitPrice(menuItem.getPrice());
-        item.setTotalPrice(menuItem.getPrice() * quantity);
+        double totalPrice = menuItem.getPrice() * quantity;
+        item.setTotalPrice(totalPrice);
 
+        item.setOrder(order);
+        //ensure list exists
+        if (order.getOrderItems() == null) {
+            order.setOrderItems(new ArrayList<>());
+        }
         order.getOrderItems().add(item);
+
+        //Calculate subtotal
+        double subtotal = order.getOrderItems().stream()
+                .mapToDouble(OrderItem::getTotalPrice).sum();
+        order.setSubtotal(subtotal);
+
+        //Calculate total
+        double deliveryFee = order.getDeliveryFee() != null ? order.getDeliveryFee() : 0.0;
+        double discount = order.getDiscountAmount() != null ? order.getDiscountAmount() : 0.0;
+
+        totalPrice = subtotal + deliveryFee - discount;
+        order.setTotalAmount(totalPrice);
+
+        order.setUpdatedDate(LocalDateTime.now());
 
         return FoodOrderResponseDTO.fromEntity(orderRepository.save(order));
     }
@@ -206,7 +229,12 @@ public class OrderService {
 
         CorporateOrder order = dto.toEntity();
 
+        order.setCorporateCode(HelperUtils.generateCode("CROP"));
+
         order.setRestaurant(restaurant);
+        order.setStatus("PENDING");
+        order.setCreatedDate(LocalDateTime.now());
+        order.setIsActive(true);
 
         return CorporateOrderResponseDTO.fromEntity(corporateOrderRepository.save(order));
     }

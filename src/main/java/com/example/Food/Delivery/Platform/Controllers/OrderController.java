@@ -88,7 +88,7 @@ public class OrderController {
     }
 
     //get full order details(with items)
-    @PutMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<FoodOrderResponseDTO> getOrder(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }

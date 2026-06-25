@@ -78,8 +78,7 @@ public class RestaurantController {
 
     //get combo meals
     @GetMapping("/{id}/combos")
-    public ResponseEntity<List<ComboMealResponseDTO>> getCombos(
-            @PathVariable Integer id) {
+    public ResponseEntity<List<ComboMealResponseDTO>> getCombos(@PathVariable Integer id) {
 
         return ResponseEntity.ok(restaurantService.getCombosForRestaurant(id));
     }

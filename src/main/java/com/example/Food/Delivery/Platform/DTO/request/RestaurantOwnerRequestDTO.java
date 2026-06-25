@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.DTO.request;
 
+import com.example.Food.Delivery.Platform.Entities.RestaurantOwner;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -28,16 +29,16 @@ public class RestaurantOwnerRequestDTO {
     @NotBlank(message = "Password is required")
     private String password; // سيتم تشفيرها في الـ Service قبل تحويلها للـ Entity
 
-    @NotBlank(message = "Business license code is required")
     private String businessLicenseCode;
 
-    /*public RestaurantOwner toEntity(String passwordHash) {
-        RestaurantOwner owner = new RestaurantOwner();
-        owner.setFirstName(this.firstName);
-        owner.setLastName(this.lastName);
-        owner.setEmail(this.email);
-        owner.setPhone(this.phone);
-        owner.setPasswordHash(passwordHash);
-        owner.setBusinessLicenseCode(this.businessLicenseCode);
-        return owner;*/
+        public RestaurantOwner toEntity(String passwordHash) {
+            RestaurantOwner owner = new RestaurantOwner();
+            owner.setFirstName(this.firstName);
+            owner.setLastName(this.lastName);
+            owner.setEmail(this.email);
+            owner.setPhoneNumber(this.phone);
+            owner.setPasswordHash(passwordHash);
+            owner.setBusinessLicenseCode(this.businessLicenseCode);
+            return owner;
+        }
 }

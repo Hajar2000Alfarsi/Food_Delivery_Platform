@@ -175,8 +175,11 @@ public class RestaurantService {
     }
 
     public RestaurantResponseDTO findRestaurantByActiveID(Integer id){
-        return restaurantRepository.findByActiveIdDTO(id).orElseThrow(()->
-                new ResourceNotFoundException("Restaurant not found with id: " + id));
+        Restaurant restaurant = restaurantRepository.findByActiveId(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException("Restaurant not found with id: " + id));
+
+        return RestaurantResponseDTO.fromEntity(restaurant);
     }
 
     //get combo meal
