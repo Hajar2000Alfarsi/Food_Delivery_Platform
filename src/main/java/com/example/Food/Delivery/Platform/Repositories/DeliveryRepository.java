@@ -1,7 +1,6 @@
 package com.example.Food.Delivery.Platform.Repositories;
 
 import com.example.Food.Delivery.Platform.Entities.Delivery;
-import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,9 +13,12 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
     List<Delivery> findByDriverIdAndStatus(@Param("driverId") Integer id, @Param("status") String status);
 
     @Query("select d from Delivery d where d.driver.id = :driverId AND d.isActive = true")
-    List<Delivery> findByDriverId(@Param("driverId") Integer id);
+    List<Delivery> findByActiveDriverId(@Param("driverId") Integer id);
 
     @Query("select d from Delivery d where d.driver.id = :driverId AND d.status = 'IN_PROGRESS' AND d.isActive = true")
-    Optional<Delivery> findActiveByDriverId(@Param("driverId") Integer id);
+    Optional<Delivery> findInProgressByDriverId(@Param("driverId") Integer id);
+
+    @Query("select d from Delivery d where d.id = :id AND d.isActive = true")
+    Optional<Delivery> findByActiveId(@Param("id") Integer id);
 
 }

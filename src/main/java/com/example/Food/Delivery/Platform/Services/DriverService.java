@@ -92,7 +92,7 @@ public class DriverService {
 
         findActiveDriver(id);
 
-        return deliveryRepository.findByDriverId(id)
+        return deliveryRepository.findByActiveDriverId(id)
                 .stream()
                 .map(DeliveryResponseDTO::fromEntity)
                 .toList();
@@ -103,7 +103,7 @@ public class DriverService {
 
         findActiveDriver(id);
 
-        Delivery delivery = deliveryRepository.findActiveByDriverId(id).orElseThrow(()->
+        Delivery delivery = deliveryRepository.findInProgressByDriverId(id).orElseThrow(()->
                 new ResourceNotFoundException("No active delivery found"));
 
         if (delivery == null) {
