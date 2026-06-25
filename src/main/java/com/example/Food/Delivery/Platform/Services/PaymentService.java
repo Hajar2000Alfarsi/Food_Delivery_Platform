@@ -45,12 +45,23 @@ public class PaymentService {
         return PaymentResponseDTO.fromEntity(paymentRepository.save(payment));
     }
 
-
     //find payment
     public Payment findPayment(Integer id) {
         return paymentRepository.findByActiveId(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Payment not found"));
     }
+
+    //Refund Payment
+    public PaymentResponseDTO refundPayment(Integer paymentId) {
+        Payment payment = findPayment(paymentId);
+
+        payment.setStatus("REFUNDED");
+
+        payment.setUpdatedDate(LocalDateTime.now());
+
+        return PaymentResponseDTO.fromEntity(paymentRepository.save(payment));
+    }
+
 
 }
