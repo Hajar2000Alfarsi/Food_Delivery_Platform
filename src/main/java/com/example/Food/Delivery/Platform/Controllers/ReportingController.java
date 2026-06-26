@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.report.DriverLeaderboardDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
 import com.example.Food.Delivery.Platform.Services.ReportingService;
@@ -39,10 +40,18 @@ public class ReportingController {
         return ResponseEntity.ok(reportingService.getRestaurantOrderCount(restaurantId));
     }
 
+    //Top 10 customers
     @GetMapping("/customers/top-loyalty")
     public ResponseEntity<List<CustomerResponseDTO>> topCustomers() {
 
         return ResponseEntity.ok(reportingService.getTopLoyalCustomers());
+    }
+
+    //Drivers leaderboard
+    @GetMapping("/drivers/leaderboard")
+    public ResponseEntity<List<DriverLeaderboardDTO>> leaderboard() {
+
+        return ResponseEntity.ok(reportingService.getDriversLeaderboard());
     }
 
 }
