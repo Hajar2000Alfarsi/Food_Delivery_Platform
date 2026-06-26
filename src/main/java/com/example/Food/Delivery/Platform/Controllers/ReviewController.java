@@ -30,5 +30,16 @@ public class ReviewController {
                 .body(reviewService.leaveRestaurantReview(customerId, restaurantId, dto.getRating(), dto.getComment()));
     }
 
+    //DRIVER REVIEW
+    @PostMapping("/driver/{driverId}/customer/{customerId}")
+    public ResponseEntity<ReviewResponseDTO> leaveDriverReview(
+            @PathVariable Integer driverId,
+            @PathVariable Integer customerId,
+            @RequestBody ReviewRequestDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(reviewService.leaveDriverReview(customerId, driverId, dto.getRating(), dto.getComment()));
+    }
+
 
 }
