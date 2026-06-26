@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReviewService {
@@ -71,5 +72,14 @@ public class ReviewService {
         review.setIsActive(true);
 
         return ReviewResponseDTO.fromEntity(reviewRepository.save(review));
+    }
+
+    //GET RESTAURANT REVIEWS
+    public List<ReviewResponseDTO> getRestaurantReviews(Integer restaurantId) {
+
+        return reviewRepository.findByRestaurantId(restaurantId)
+                .stream()
+                .map(ReviewResponseDTO::fromEntity)
+                .toList();
     }
 }
