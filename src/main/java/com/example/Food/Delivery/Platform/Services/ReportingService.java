@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
 import com.example.Food.Delivery.Platform.Entities.FoodOrder;
@@ -7,9 +8,11 @@ import com.example.Food.Delivery.Platform.Repositories.CustomerRepository;
 import com.example.Food.Delivery.Platform.Repositories.DeliveryRepository;
 import com.example.Food.Delivery.Platform.Repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ReportingService {
@@ -37,7 +40,7 @@ public class ReportingService {
         return new RevenueReportDTO(restaurantId, date.toString(), revenue);
     }
 
-    // Total orders
+    //Total orders
     public OrderCountDTO getRestaurantOrderCount(Integer restaurantId) {
 
         Long count = orderRepository.countCompletedOrders(restaurantId);
@@ -45,6 +48,14 @@ public class ReportingService {
         return new OrderCountDTO(restaurantId, count);
     }
 
+    //Top 10 customers
+    public List<CustomerResponseDTO> getTopLoyalCustomers() {
 
+        return customerRepository.findTopCustomersByLoyalty(
+                        PageRequest.of(0,10))
+                .stream()
+                .map(CustomerResponseDTO::fromEntity)
+                .toList();
+    }
 
 }
