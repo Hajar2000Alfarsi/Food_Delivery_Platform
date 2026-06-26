@@ -61,7 +61,8 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<ReviewResponseDTO> deleteReview(@PathVariable Integer reviewId) {
 
-        return ResponseEntity.ok(reviewService.deleteReview(reviewId));
+        reviewService.deleteReview(reviewId);
+        return ResponseEntity.noContent().build();
     }
 
 }

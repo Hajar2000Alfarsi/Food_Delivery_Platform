@@ -24,4 +24,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
     @Query("select d from Delivery d where d.status  = :status  AND d.isActive = true")
     List<Delivery>  findByStatus(@Param("status") String status);
 
+    @Query("select d.driver, count(d) from Delivery d where d.status = 'DELIVERED' AND d.isActive = true group by d.driver order by count(d) desc")
+    List<Object[]> getDriverLeaderboard();
 }

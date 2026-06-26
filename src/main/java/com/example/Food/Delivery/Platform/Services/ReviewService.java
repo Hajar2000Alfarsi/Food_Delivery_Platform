@@ -93,7 +93,7 @@ public class ReviewService {
     }
 
     //SOFT DELETE REVIEW
-    public ReviewResponseDTO deleteReview(Integer reviewId) {
+    public void deleteReview(Integer reviewId) {
 
         Review review = reviewRepository.findByActiveId(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
@@ -101,6 +101,6 @@ public class ReviewService {
         review.setIsActive(false);
         review.setUpdatedDate(LocalDateTime.now());
 
-        return ReviewResponseDTO.fromEntity(reviewRepository.save(review));
+        reviewRepository.save(review);
     }
 }
