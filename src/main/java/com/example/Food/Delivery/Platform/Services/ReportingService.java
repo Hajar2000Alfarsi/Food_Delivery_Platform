@@ -1,8 +1,10 @@
 package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.report.DriverLeaderboardDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
+import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import com.example.Food.Delivery.Platform.Entities.FoodOrder;
 import com.example.Food.Delivery.Platform.Repositories.CustomerRepository;
 import com.example.Food.Delivery.Platform.Repositories.DeliveryRepository;
@@ -55,6 +57,20 @@ public class ReportingService {
                         PageRequest.of(0,10))
                 .stream()
                 .map(CustomerResponseDTO::fromEntity)
+                .toList();
+    }
+
+    // Drivers leaderboard
+    public List<DriverLeaderboardDTO> getDriversLeaderboard() {
+
+        return deliveryRepository.getDriverLeaderboard()
+                .stream()
+                .map(obj ->
+                        new DriverLeaderboardDTO(
+                                ((DeliveryDriver) obj[0]).getId(),
+                                ((DeliveryDriver) obj[0]).getFirstName() + " " +
+                                        ((DeliveryDriver) obj[0]).getLastName(),
+                                (Long) obj[1]))
                 .toList();
     }
 
