@@ -57,5 +57,11 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getDriverReviews(driverId));
     }
 
+    //SOFT DELETE REVIEW
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<ReviewResponseDTO> deleteReview(@PathVariable Integer reviewId) {
+
+        return ResponseEntity.ok(reviewService.deleteReview(reviewId));
+    }
 
 }
