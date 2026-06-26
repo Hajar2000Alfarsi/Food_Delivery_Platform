@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReportingService {
@@ -36,8 +37,11 @@ public class ReportingService {
                                                                 //start             , end
         double revenue = orderRepository.findByOrderDateBetween(date.atStartOfDay(), date.plusDays(1).atStartOfDay())
                 .stream()
-                .filter(o -> o.getRestaurant().getId().equals(restaurantId))
-                .mapToDouble(FoodOrder::getTotalAmount)
+                .filter(o -> o.getRestaurant() != null
+                        && o.getRestaurant().getId().equals(restaurantId))
+                .map(FoodOrder::getTotalAmount)
+                .filter(Objects::nonNull)
+                .mapToDouble(Double::doubleValue)
                 .sum();
 
         return new RevenueReportDTO(restaurantId, date.toString(), revenue);
@@ -84,8 +88,8 @@ public class ReportingService {
         long totalOrders = orders.size();
 
         double fees = orders.stream()
-                        .mapToDouble(FoodOrder::getDeliveryFee)
-                        .sum();
+                .mapToDouble(o -> o.getDeliveryFee() == null ? 0.0 : o.getDeliveryFee())
+                .sum();
 
         return new DailySummaryDTO(date.toString(), totalOrders, fees);
     }
