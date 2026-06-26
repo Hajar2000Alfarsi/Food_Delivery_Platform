@@ -37,5 +37,14 @@ public class ReportingService {
         return new RevenueReportDTO(restaurantId, date.toString(), revenue);
     }
 
+    // Total orders
+    public OrderCountDTO getRestaurantOrderCount(Integer restaurantId) {
+
+        Long count = orderRepository.countCompletedOrders(restaurantId);
+
+        return new OrderCountDTO(restaurantId, count);
+    }
+
+
 
 }
