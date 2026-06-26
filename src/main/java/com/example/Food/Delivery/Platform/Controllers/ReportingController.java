@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
+import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
 import com.example.Food.Delivery.Platform.Services.ReportingService;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -37,5 +39,10 @@ public class ReportingController {
         return ResponseEntity.ok(reportingService.getRestaurantOrderCount(restaurantId));
     }
 
+    @GetMapping("/customers/top-loyalty")
+    public ResponseEntity<List<CustomerResponseDTO>> topCustomers() {
+
+        return ResponseEntity.ok(reportingService.getTopLoyalCustomers());
+    }
 
 }
