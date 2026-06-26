@@ -82,4 +82,15 @@ public class ReviewService {
                 .map(ReviewResponseDTO::fromEntity)
                 .toList();
     }
+
+    //GET DRIVER REVIEWS
+    public List<ReviewResponseDTO> getDriverReviews(Integer driverId) {
+
+        return reviewRepository.findByDriverId(driverId)
+                .stream()
+                .map(ReviewResponseDTO::fromEntity)
+                .toList();
+    }
+
+
 }
