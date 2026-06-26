@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.report.DailySummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DriverLeaderboardDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
@@ -54,4 +55,10 @@ public class ReportingController {
         return ResponseEntity.ok(reportingService.getDriversLeaderboard());
     }
 
+    //Daily summary
+    @GetMapping("/platform/daily-summary")
+    public ResponseEntity<DailySummaryDTO> summary(@RequestParam LocalDate date) {
+
+        return ResponseEntity.ok(reportingService.getDailySummary(date));
+    }
 }
