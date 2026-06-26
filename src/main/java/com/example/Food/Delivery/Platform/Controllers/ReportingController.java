@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
+import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
 import com.example.Food.Delivery.Platform.Services.ReportingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class ReportingController {
         this.reportingService = reportingService;
     }
 
+    //Revenue for restaurant
     @GetMapping("/revenue/restaurant/{restaurantId}")
     public ResponseEntity<RevenueReportDTO> revenue(
             @PathVariable Integer restaurantId,
@@ -26,4 +28,14 @@ public class ReportingController {
 
         return ResponseEntity.ok(reportingService.getRestaurantRevenue(restaurantId, date));
     }
+
+    //Total orders
+    @GetMapping("/orders/count/restaurant/{restaurantId}")
+    public ResponseEntity<OrderCountDTO> orderCount(
+            @PathVariable Integer restaurantId) {
+
+        return ResponseEntity.ok(reportingService.getRestaurantOrderCount(restaurantId));
+    }
+
+
 }
