@@ -92,5 +92,15 @@ public class ReviewService {
                 .toList();
     }
 
+    //SOFT DELETE REVIEW
+    public void deleteReview(Integer reviewId) {
 
+        Review review = reviewRepository.findByActiveId(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
+
+        review.setIsActive(false);
+        review.setUpdatedDate(LocalDateTime.now());
+
+        reviewRepository.save(review);
+    }
 }
