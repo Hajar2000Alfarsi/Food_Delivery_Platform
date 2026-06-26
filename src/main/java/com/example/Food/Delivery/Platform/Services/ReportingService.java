@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.report.DailySummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DriverLeaderboardDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
@@ -72,6 +73,21 @@ public class ReportingService {
                                         ((DeliveryDriver) obj[0]).getLastName(),
                                 (Long) obj[1]))
                 .toList();
+    }
+
+    // Daily summary
+    public DailySummaryDTO getDailySummary(LocalDate date) {
+
+        List<FoodOrder> orders = orderRepository.findByOrderDateBetween(date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+
+        //total number of orders
+        long totalOrders = orders.size();
+
+        double fees = orders.stream()
+                        .mapToDouble(FoodOrder::getDeliveryFee)
+                        .sum();
+
+        return new DailySummaryDTO(date.toString(), totalOrders, fees);
     }
 
 }
