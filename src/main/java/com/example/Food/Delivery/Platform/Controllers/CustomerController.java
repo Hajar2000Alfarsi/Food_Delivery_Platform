@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -134,6 +135,18 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.patchCustomer(id, dto));
     }
 
+    //get customer orders
+    @GetMapping("/{id}/orders/filter")
+    public ResponseEntity<List<FoodOrderResponseDTO>> getOrders(
+            @PathVariable Integer id,
+            @RequestParam String status,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(customerService.getCustomerOrders(id, status, from, to, page, size));
+    }
 
 
 }
