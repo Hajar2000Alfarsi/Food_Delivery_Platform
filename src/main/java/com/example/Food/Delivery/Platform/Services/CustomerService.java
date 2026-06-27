@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.request.CustomerAddressRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.request.CustomerPatchExpandDTO;
 import com.example.Food.Delivery.Platform.DTO.request.CustomerRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerAddressResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
@@ -216,5 +217,24 @@ public class CustomerService {
                 .toList();
     }
 
+    //Partial Update
+    public CustomerResponseDTO patchCustomer(Integer customerId, CustomerPatchExpandDTO dto) {
+        Customer customer = findActiveCustomer(customerId);
 
+        if (dto.getFirstName() != null) {
+            customer.setFirstName(dto.getFirstName());
+        }
+        if (dto.getLastName() != null) {
+            customer.setLastName(dto.getLastName());
+        }
+        if (dto.getPhoneNumber() != null) {
+            customer.setPhoneNumber(dto.getPhoneNumber());
+        }
+        if (dto.getEmail() != null) {
+            customer.setEmail(dto.getEmail());
+        }
+        customer.setUpdatedDate(LocalDateTime.now());
+
+        return CustomerResponseDTO.fromEntity(customerRepository.save(customer));
+    }
 }
