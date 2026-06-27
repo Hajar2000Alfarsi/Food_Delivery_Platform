@@ -263,4 +263,52 @@ public class OrderService {
 
          return FoodOrderResponseDTO.fromEntity(orderRepository.save(order));
     }
+
+    //reorder
+    public FoodOrderResponseDTO reorder(Integer orderId){
+        FoodOrder oldOrder = findOrder(orderId);
+        FoodOrder newOrder = new FoodOrder();
+
+        newOrder.setOrderCode(HelperUtils.generateCode("ORD"));
+
+        newOrder.setCustomer(oldOrder.getCustomer());
+        newOrder.setRestaurant(oldOrder.getRestaurant());
+
+        newOrder.setOrderDate(LocalDateTime.now());
+
+        newOrder.setStatus("PENDING");
+
+        newOrder.setSubtotal(oldOrder.getSubtotal());
+
+        newOrder.setDeliveryFee(oldOrder.getDeliveryFee());
+
+        newOrder.setDiscountAmount(0.0);
+
+        newOrder.setTotalAmount(oldOrder.getSubtotal() + oldOrder.getDeliveryFee());
+
+        newOrder.setIsActive(true);
+
+        List<OrderItem> items = new ArrayList<>();
+
+        for(OrderItem oldItem : oldOrder.getOrderItems()){
+
+            OrderItem item = new OrderItem();
+
+            item.setMenuItem(oldItem.getMenuItem());
+
+            item.setQuantity(oldItem.getQuantity());
+
+            item.setUnitPrice(oldItem.getUnitPrice());
+
+            item.setTotalPrice(oldItem.getTotalPrice());
+
+            item.setOrder(newOrder);
+
+            items.add(item);
+        }
+
+        newOrder.setOrderItems(items);
+
+        return FoodOrderResponseDTO.fromEntity(orderRepository.save(newOrder));
+    }
 }
