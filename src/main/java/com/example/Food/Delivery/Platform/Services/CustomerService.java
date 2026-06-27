@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -236,5 +237,21 @@ public class CustomerService {
         customer.setUpdatedDate(LocalDateTime.now());
 
         return CustomerResponseDTO.fromEntity(customerRepository.save(customer));
+    }
+
+    //get customer orders
+    public List<FoodOrderResponseDTO> getCustomerOrders(
+            Integer customerId, String status, LocalDate from,
+            LocalDate to, int page, int size) {
+        findActiveCustomer(customerId);
+
+        return orderRepository.findCustomerOrders(customerId,
+                status,
+                from.atStartOfDay(),
+                to.plusDays(1).atStartOfDay(),
+                PageRequest.of(page,size))
+                .stream()
+                .map(FoodOrderResponseDTO::fromEntity)
+                .toList();
     }
 }
