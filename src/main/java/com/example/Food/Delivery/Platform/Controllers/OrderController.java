@@ -6,10 +6,13 @@ import com.example.Food.Delivery.Platform.DTO.response.CorporateOrderResponseDTO
 import com.example.Food.Delivery.Platform.DTO.response.FoodOrderResponseDTO;
 import com.example.Food.Delivery.Platform.Services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -112,5 +115,18 @@ public class OrderController {
     public ResponseEntity<FoodOrderResponseDTO> reorder(@PathVariable Integer id){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.reorder(id));
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<Page<FoodOrderResponseDTO>> getCustomerOrders(
+            @PathVariable Integer customerId,
+            @RequestParam String status,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+
+        return ResponseEntity.ok(orderService.getCustomerOrdersFiltered(
+                        customerId, status, from, to, page, size));
     }
 }
