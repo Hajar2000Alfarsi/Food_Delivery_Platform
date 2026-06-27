@@ -11,6 +11,9 @@ import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
 import com.example.Food.Delivery.Platform.Repositories.*;
 import com.example.Food.Delivery.Platform.Utils.HelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -312,5 +315,14 @@ public class OrderService {
         return FoodOrderResponseDTO.fromEntity(orderRepository.save(newOrder));
     }
 
+    //filter order list
+    public Page<FoodOrderResponseDTO> getCustomerOrdersFiltered(
+            Integer customerId, String status,
+            LocalDateTime from, LocalDateTime to,
+            int page, int size){
+        Pageable pageable = PageRequest.of(page,size);
 
+        return orderRepository.findCustomerOrders(customerId, status, from, to, pageable)
+                .map(FoodOrderResponseDTO::fromEntity);
+    }
 }
