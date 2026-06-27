@@ -14,6 +14,7 @@ import com.example.Food.Delivery.Platform.Repositories.CustomerRepository;
 import com.example.Food.Delivery.Platform.Repositories.OrderRepository;
 import com.example.Food.Delivery.Platform.Utils.HelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -206,4 +207,14 @@ public class CustomerService {
                 .map(FoodOrderResponseDTO::fromEntity)
                 .toList();
     }
+
+    //search customer
+    public List<CustomerResponseDTO> searchCustomers(String name, int page, int size){
+        return customerRepository.searchByName(name, PageRequest.of(page, size))
+                .stream()
+                .map(CustomerResponseDTO::fromEntity)
+                .toList();
+    }
+
+
 }
