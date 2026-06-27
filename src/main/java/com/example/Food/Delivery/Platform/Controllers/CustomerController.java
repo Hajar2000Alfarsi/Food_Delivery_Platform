@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.request.CustomerAddressRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.request.CustomerPatchExpandDTO;
 import com.example.Food.Delivery.Platform.DTO.request.CustomerRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerAddressResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
@@ -124,6 +125,14 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.searchCustomersByName(name, page, size));
     }
 
+    //partial update
+    @PatchMapping("/{id}")
+    public ResponseEntity<CustomerResponseDTO> patchCustomer(
+            @PathVariable Integer id,
+            @RequestBody CustomerPatchExpandDTO dto) {
+
+        return ResponseEntity.ok(customerService.patchCustomer(id, dto));
+    }
 
 
 
