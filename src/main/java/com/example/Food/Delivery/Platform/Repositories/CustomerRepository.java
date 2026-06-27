@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Repositories;
 
 import com.example.Food.Delivery.Platform.Entities.Customer;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +30,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     @Query("select c from Customer c where c.isActive = true order by c.loyaltyPoints desc")
     List<Customer> findTopCustomersByLoyalty(Pageable pageable);
+
+    //take every name have "name" anywhere in the first name
+    @Query("select c from Customer c where lower(c.firstName) like lower(concat('%',:name , '%')) AND c.isActive = true")
+    Page<Customer> searchByName(@Param("name") String name, Pageable pageable);
 }
 
