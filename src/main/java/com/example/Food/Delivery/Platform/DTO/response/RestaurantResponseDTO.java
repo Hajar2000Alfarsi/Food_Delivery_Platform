@@ -22,6 +22,8 @@ public class RestaurantResponseDTO {
     private Double minOrderAmount;
     private Double deliveryFee;
     private Boolean acceptingOrders;
+    private Double latitude;
+    private Double longitude;
 
     public static RestaurantResponseDTO fromEntity(Restaurant restaurant){
         if (restaurant == null) return null;
@@ -36,6 +38,8 @@ public class RestaurantResponseDTO {
                 .minOrderAmount(restaurant.getMinOrderAmount())
                 .deliveryFee(restaurant.getDeliveryFee())
                 .acceptingOrders(restaurant.getAcceptingOrders())
+                .latitude(restaurant.getLatitude())
+                .longitude(restaurant.getLongitude())
                 .build();
     }
 }

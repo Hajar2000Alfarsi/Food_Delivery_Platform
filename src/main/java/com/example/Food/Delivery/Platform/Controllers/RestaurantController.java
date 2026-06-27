@@ -111,4 +111,14 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.bulkUpdateMenuItemPrices(id, percentage));
     }
 
+    //Restaurants within a radius
+    @GetMapping("/near")
+    public ResponseEntity<List<RestaurantResponseDTO>> getNearbyRestaurants(
+            @RequestParam double lat,
+            @RequestParam double lng,
+            @RequestParam double radiusKm) {
+
+        return ResponseEntity.ok(restaurantService.getNearbyRestaurants(lat, lng, radiusKm));
+    }
+
 }

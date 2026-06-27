@@ -37,6 +37,12 @@ public class RestaurantRequestDTO {
     @PositiveOrZero(message = "Delivery fee must be positive or zero")
     private Double deliveryFee;
 
+    @NotNull(message = "Latitude is required")
+    private Double latitude;
+
+    @NotNull(message = "Longitude is required")
+    private Double longitude;
+
     public Restaurant toEntity(){
         Restaurant restaurant = new Restaurant();
         restaurant.setName(name);
@@ -46,6 +52,8 @@ public class RestaurantRequestDTO {
         restaurant.setClosingTime(closingTime);
         restaurant.setMinOrderAmount(minOrderAmount);
         restaurant.setDeliveryFee(deliveryFee);
+        restaurant.setLatitude(latitude);
+        restaurant.setLongitude(longitude);
         restaurant.setAcceptingOrders(true);
         return restaurant;
     }

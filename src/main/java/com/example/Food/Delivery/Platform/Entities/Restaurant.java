@@ -27,6 +27,9 @@ public class Restaurant extends BaseClass {
 
     private Boolean acceptingOrders;
 
+    private Double latitude;
+    private Double longitude;
+
     @ManyToOne
     private RestaurantOwner restaurantOwner;
 

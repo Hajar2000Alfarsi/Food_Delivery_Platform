@@ -17,6 +17,7 @@ import com.example.Food.Delivery.Platform.Repositories.ComboMealRepository;
 import com.example.Food.Delivery.Platform.Repositories.MenuItemRepository;
 import com.example.Food.Delivery.Platform.Repositories.RestaurantOwnerRepository;
 import com.example.Food.Delivery.Platform.Repositories.RestaurantRepository;
+import com.example.Food.Delivery.Platform.Utils.HelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,8 @@ public class RestaurantService {
         restaurant.setAcceptingOrders(true);
         restaurant.setCreatedDate(LocalDateTime.now());
         restaurant.setUpdatedDate(LocalDateTime.now());
+        restaurant.setLongitude(dto.getLongitude());
+        restaurant.setLatitude(dto.getLatitude());
         restaurant.setIsActive(true);
 
         Restaurant saved = restaurantRepository.save(restaurant);
@@ -193,7 +196,18 @@ public class RestaurantService {
                 .toList();
     }
 
+    //Restaurants within a radius
+    public List<RestaurantResponseDTO> getNearbyRestaurants(double lat, double lng, double radiusKm) {
 
-
-
+        return restaurantRepository.findAllActive()
+                .stream()
+                .filter(r ->
+                        r.getLatitude() != null
+                                && r.getLongitude() != null)
+                .filter(r -> { double distance = HelperUtils.calculateDistance(lat, lng, r.getLatitude(), r.getLongitude());
+                    return distance <= radiusKm;
+                })
+                .map(RestaurantResponseDTO::fromEntity)
+                .toList();
+    }
 }
