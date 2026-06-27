@@ -114,4 +114,17 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getCustomerOrders(id));
     }
 
+    //search customer by name
+    @GetMapping("/search")
+    public ResponseEntity<List<CustomerResponseDTO>> searchCustomers(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(customerService.searchCustomersByName(name, page, size));
+    }
+
+
+
+
 }

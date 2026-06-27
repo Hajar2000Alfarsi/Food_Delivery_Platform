@@ -210,8 +210,8 @@ public class CustomerService {
                 .toList();
     }
 
-    //search customer
-    public List<CustomerResponseDTO> searchCustomers(String name, int page, int size){
+    //search customer by name
+    public List<CustomerResponseDTO> searchCustomersByName(String name, int page, int size){
         return customerRepository.searchByName(name, PageRequest.of(page, size))
                 .stream()
                 .map(CustomerResponseDTO::fromEntity)
