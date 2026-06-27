@@ -107,4 +107,10 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.placeCorporateOrder(dto));
     }
 
+    //reorder
+    @PostMapping("/{id}/reorder")
+    public ResponseEntity<FoodOrderResponseDTO> reorder(@PathVariable Integer id){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.reorder(id));
+    }
 }
