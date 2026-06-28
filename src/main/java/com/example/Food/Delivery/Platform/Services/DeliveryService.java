@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.response.DeliveryResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.DriverPerformanceDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.NearbyDriverDTO;
 import com.example.Food.Delivery.Platform.Entities.Delivery;
@@ -159,6 +160,22 @@ public class DeliveryService {
             }
         }
         return result;
+    }
+
+    //Driver Performance
+    public DriverPerformanceDTO getDriverPerformance(Integer driverId) {
+        List<Delivery> deliveries = deliveryRepository.findDeliveredByDriver(driverId);
+
+        long completed = deliveries.size();
+
+        double avgMinutes = deliveries.stream()
+                .filter(d -> d.getAssignedAt() != null && d.getDeliveredAt() != null)
+                .mapToLong(d -> java.time.Duration.between(d.getAssignedAt(),
+                        d.getDeliveredAt()
+                ).toMinutes())
+                .average().orElse(0.0);
+
+        return new DriverPerformanceDTO(driverId, completed, avgMinutes);
     }
 
 }

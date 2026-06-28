@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.response.DeliveryResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.DriverPerformanceDTO;
 import com.example.Food.Delivery.Platform.DTO.response.NearbyDriverDTO;
 import com.example.Food.Delivery.Platform.Services.DeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,4 +72,10 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryService.getNearbyDrivers(lat, lng, radiusKm));
     }
 
+    //Driver Performance
+    @GetMapping("/drivers/{driverId}/performance")
+    public ResponseEntity<DriverPerformanceDTO> getDriverPerformance(@PathVariable Integer driverId) {
+
+        return ResponseEntity.ok(deliveryService.getDriverPerformance(driverId));
+    }
 }
