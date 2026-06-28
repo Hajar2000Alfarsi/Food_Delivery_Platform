@@ -1,0 +1,14 @@
+package com.example.Food.Delivery.Platform.DTO.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class NearbyDriverDTO {
+    private Integer driverId;
+    private String fullName;
+    private Double distanceKm;
+}

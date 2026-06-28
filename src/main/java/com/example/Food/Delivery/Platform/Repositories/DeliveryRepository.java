@@ -31,4 +31,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
 
     @Query("select d from Delivery d WHERE d.order.id = :orderId AND d.isActive = true")
     Optional<Delivery> findByOrderId(@Param("orderId") Integer orderId);
+
+    @Query("select d from Delivery d where d.driver.id = :driverId AND d.status = 'DELIVERED' AND d.isActive = true")
+    List<Delivery> findDeliveredByDriver(@Param("driverId") Integer driverId);
 }

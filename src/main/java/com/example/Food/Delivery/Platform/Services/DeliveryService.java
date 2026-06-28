@@ -2,6 +2,7 @@ package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.response.DeliveryResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.NearbyDriverDTO;
 import com.example.Food.Delivery.Platform.Entities.Delivery;
 import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import com.example.Food.Delivery.Platform.Entities.FoodOrder;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -134,6 +136,29 @@ public class DeliveryService {
         return deliveryRepository.findByStatus(status).stream()
                 .map(DeliveryResponseDTO::fromEntity)
                 .toList();
+    }
+
+    //Nearby Drivers
+    public List<NearbyDriverDTO> getNearbyDrivers(double lat, double lng, double radiusKm) {
+        List<DeliveryDriver> drivers = driverRepository.findByIsOnlineTrue();
+
+        List<NearbyDriverDTO> result = new ArrayList<>();
+
+        for (DeliveryDriver d : drivers) {
+            if (d.getCurrentLat() == null || d.getCurrentLng() == null)
+                continue;
+
+            double distance = HelperUtils.calculateDistance(
+                    lat, lng,
+                    d.getCurrentLat(), d.getCurrentLng());
+
+            if (distance <= radiusKm) {
+                result.add(new NearbyDriverDTO(d.getId(),
+                        d.getFirstName() + " " + d.getLastName(),
+                        distance));
+            }
+        }
+        return result;
     }
 
 }
