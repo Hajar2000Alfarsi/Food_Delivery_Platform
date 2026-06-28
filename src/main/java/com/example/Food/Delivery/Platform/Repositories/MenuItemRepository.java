@@ -25,5 +25,12 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
     @Query("select m from MenuItem m where m.price BETWEEN :min AND :max AND m.isActive = true")
     List<MenuItem> findByPriceBetween(@Param("min") Double min, @Param("max") Double max);
 
+    @Query("select m from MenuItem m where " +
+            "lower(m.name) like lower(concat('%', :keyword, '%')) AND " +
+            "m.calories between :minCalories AND :maxCalories AND m.isActive = true")
+    List<MenuItem> searchMenuItems(
+            @Param("keyword") String keyword,
+            @Param("minCalories") Integer minCalories,
+            @Param("maxCalories") Integer maxCalories);
 
 }

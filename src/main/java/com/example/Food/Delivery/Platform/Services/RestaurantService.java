@@ -240,4 +240,12 @@ public class RestaurantService {
                         (long) obj[2]
                 )).toList();
     }
-}
+
+    //menu item search
+    public List<MenuItemResponseDTO> searchMenuItems(String keyword, Integer minCalories, Integer maxCalories) {
+        return menuItemRepository.searchMenuItems(keyword, minCalories, maxCalories).stream()
+                .map(MenuItemResponseDTO::fromEntity)
+                .toList();
+    }
+
+    }

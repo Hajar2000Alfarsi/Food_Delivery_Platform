@@ -132,4 +132,14 @@ public class RestaurantController {
 
         return ResponseEntity.ok(restaurantService.getTopSellingMenuItems(id));
     }
+
+    //menu item search
+    @GetMapping("/menu/search")
+    public ResponseEntity<List<MenuItemResponseDTO>> searchMenuItems(
+            @RequestParam String keyword,
+            @RequestParam Integer minCalories,
+            @RequestParam Integer maxCalories) {
+
+        return ResponseEntity.ok(restaurantService.searchMenuItems(keyword, minCalories, maxCalories));
+    }
 }
