@@ -17,4 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @Query("select r from Review r where r.id = :id AND r.isActive = true")
     Optional<Review> findByActiveId(@Param("id") Integer id);
+
+    @Query("select avg(r.rating) from Review r where r.restaurant.id = :restaurantId AND r.isActive = true")
+    Double getAverageRating(@Param("restaurantId") Integer restaurantId);
 }

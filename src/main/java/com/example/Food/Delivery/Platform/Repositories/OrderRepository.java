@@ -39,4 +39,6 @@ public interface OrderRepository extends JpaRepository<FoodOrder, Integer> {
             @Param("to") LocalDateTime to,
             Pageable pageable);
 
+    @Query("select sum(o.totalAmount) from FoodOrder o where o.restaurant.id = :restaurantId AND o.status = 'DELIVERED' AND o.isActive = true")
+    Double getTotalRevenue(@Param("restaurantId") Integer restaurantId);
 }

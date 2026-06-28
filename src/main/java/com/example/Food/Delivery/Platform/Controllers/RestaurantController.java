@@ -5,6 +5,7 @@ import com.example.Food.Delivery.Platform.DTO.request.MenuItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.RestaurantAnalyticsDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
@@ -121,4 +122,9 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getNearbyRestaurants(lat, lng, radiusKm));
     }
 
+    @GetMapping("/{id}/analytics")
+    public ResponseEntity<RestaurantAnalyticsDTO> getAnalytics(@PathVariable Integer id) {
+
+        return ResponseEntity.ok(restaurantService.getRestaurantAnalytics(id));
+    }
 }

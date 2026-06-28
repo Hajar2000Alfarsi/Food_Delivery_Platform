@@ -5,6 +5,7 @@ import com.example.Food.Delivery.Platform.DTO.request.MenuItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.RestaurantAnalyticsDTO;
 import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
@@ -13,10 +14,7 @@ import com.example.Food.Delivery.Platform.Entities.MenuItem;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
 import com.example.Food.Delivery.Platform.Entities.RestaurantOwner;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
-import com.example.Food.Delivery.Platform.Repositories.ComboMealRepository;
-import com.example.Food.Delivery.Platform.Repositories.MenuItemRepository;
-import com.example.Food.Delivery.Platform.Repositories.RestaurantOwnerRepository;
-import com.example.Food.Delivery.Platform.Repositories.RestaurantRepository;
+import com.example.Food.Delivery.Platform.Repositories.*;
 import com.example.Food.Delivery.Platform.Utils.HelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,14 +28,19 @@ public class RestaurantService {
     private final MenuItemRepository menuItemRepository;
     private final ComboMealRepository comboMealRepository;
     private final RestaurantOwnerRepository ownerRepository;
+    private final OrderRepository orderRepository;
+    private final ReviewRepository reviewRepository;
 
     @Autowired
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, ComboMealRepository comboMealRepository, RestaurantOwnerRepository ownerRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, ComboMealRepository comboMealRepository, RestaurantOwnerRepository ownerRepository, OrderRepository orderRepository, ReviewRepository reviewRepository) {
         this.restaurantRepository = restaurantRepository;
         this.menuItemRepository = menuItemRepository;
         this.comboMealRepository = comboMealRepository;
         this.ownerRepository = ownerRepository;
+        this.orderRepository = orderRepository;
+        this.reviewRepository = reviewRepository;
     }
+
 
     //Create Restaurant
     public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO dto, Integer ownerId) {
@@ -210,4 +213,20 @@ public class RestaurantService {
                 .map(RestaurantResponseDTO::fromEntity)
                 .toList();
     }
+
+    //Average rating, total revenue, total completed orders(Restaurant Analytics)
+    public RestaurantAnalyticsDTO getRestaurantAnalytics(Integer restaurantId) {
+        Restaurant restaurant = restaurantRepository.findByActiveId(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
+
+        Double revenue = orderRepository.getTotalRevenue(restaurantId);
+        Long totalOrders = orderRepository.countCompletedOrders(restaurantId);
+        Double avgRating = reviewRepository.getAverageRating(restaurantId);
+
+        return new RestaurantAnalyticsDTO(restaurantId,
+                avgRating != null ? avgRating : 0.0,
+                totalOrders,
+                revenue != null ? revenue : 0.0);
+    }
+
 }
