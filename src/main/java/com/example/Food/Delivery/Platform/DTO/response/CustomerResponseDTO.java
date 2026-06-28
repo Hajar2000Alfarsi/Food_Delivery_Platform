@@ -22,6 +22,8 @@ public class CustomerResponseDTO {
     private String phoneNumber;
     private Integer loyaltyPoints;
     private String customerCode;
+    private Double latitude;
+    private Double longitude;
     private List<CustomerAddressResponseDTO> address;
 
     public static CustomerResponseDTO fromEntity(Customer customer) {
@@ -43,6 +45,8 @@ public class CustomerResponseDTO {
                 .loyaltyPoints(customer.getLoyaltyPoints())
                 .customerCode(customer.getCustomerCode())
                 .address(addressDTOs)
+                .latitude(customer.getLatitude())
+                .longitude(customer.getLongitude())
                 .build();
     }
 }

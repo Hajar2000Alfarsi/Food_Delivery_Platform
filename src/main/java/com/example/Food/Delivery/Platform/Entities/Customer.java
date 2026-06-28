@@ -17,6 +17,9 @@ public class Customer extends BaseUser{
     private Integer loyaltyPoints;
     private String customerCode;
 
+    private Double latitude;
+    private Double longitude;
+
     @JsonIgnore
     @OneToMany(mappedBy = "customer")
     private  List<CustomerAddress> addresses;

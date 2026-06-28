@@ -3,6 +3,7 @@ package com.example.Food.Delivery.Platform.DTO.request;
 import com.example.Food.Delivery.Platform.Entities.Customer;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,12 @@ public class CustomerRequestDTO {
     @NotBlank(message = "password is required")
     private String passwordHash;
 
+    @NotNull(message = "Latitude is required")
+    private Double latitude;
+
+    @NotNull(message = "Longitude is required")
+    private Double longitude;
+
     public Customer toEntity(String customerCode){
         Customer customer = new Customer();
         customer.setFirstName(firstName);
@@ -38,6 +45,8 @@ public class CustomerRequestDTO {
         customer.setPasswordHash(passwordHash);
         customer.setCustomerCode(customerCode);
         customer.setLoyaltyPoints(0);
+        customer.setLatitude(latitude);
+        customer.setLongitude(longitude);
 
         return customer;
     }

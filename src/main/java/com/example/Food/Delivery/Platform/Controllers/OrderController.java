@@ -3,6 +3,7 @@ package com.example.Food.Delivery.Platform.Controllers;
 import com.example.Food.Delivery.Platform.DTO.request.CorporateOrderRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.OrderItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CorporateOrderResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.ETAResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.FoodOrderResponseDTO;
 import com.example.Food.Delivery.Platform.Services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +118,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.reorder(id));
     }
 
+    //filter order list
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<Page<FoodOrderResponseDTO>> getCustomerOrders(
             @PathVariable Integer customerId,
@@ -128,5 +130,12 @@ public class OrderController {
 
         return ResponseEntity.ok(orderService.getCustomerOrdersFiltered(
                         customerId, status, from, to, page, size));
+    }
+
+    //Estimated delivery time based on driver location and distance
+    @GetMapping("/{id}/eta")
+    public ResponseEntity<ETAResponseDTO> getETA(@PathVariable Integer id){
+
+        return ResponseEntity.ok(orderService.getEstimatedDeliveryTime(id));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Repositories;
 
 import com.example.Food.Delivery.Platform.Entities.Delivery;
+import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +28,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
     @Query("select d.driver, count(d) from Delivery d where d.status = 'DELIVERED' AND d.isActive = true group by d.driver order by count(d) desc")
     //Object ---> return driver + count
     List<Object[]> getDriverLeaderboard();
+
+    @Query("select d from Delivery d WHERE d.order.id = :orderId AND d.isActive = true")
+    Optional<Delivery> findByOrderId(@Param("orderId") Integer orderId);
 }

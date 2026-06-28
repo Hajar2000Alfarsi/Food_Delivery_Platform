@@ -34,5 +34,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     //take every name have "name" anywhere in the first name
     @Query("select c from Customer c where lower(c.firstName) like lower(concat('%',:name , '%')) AND c.isActive = true")
     Page<Customer> searchByName(@Param("name") String name, Pageable pageable);
+
+    @Query("select c from Customer c join c.orders o where o.id = :id AND c.isActive = true")
+    Optional<Customer> findByOrderId(@Param("id") Integer customerId);
 }
 

@@ -3,6 +3,7 @@ package com.example.Food.Delivery.Platform.Services;
 import com.example.Food.Delivery.Platform.DTO.request.CorporateOrderRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.OrderItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CorporateOrderResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.ETAResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.FoodOrderResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.OrderItemResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.*;
@@ -28,15 +29,16 @@ public class OrderService {
     private final MenuItemRepository menuItemRepository;
     private final OrderItemRepository orderItemRepository;
     private CorporateOrderRepository corporateOrderRepository;
+    private final DeliveryRepository deliveryRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, OrderItemRepository orderItemRepository, CorporateOrderRepository corporateOrderRepository) {
+    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, OrderItemRepository orderItemRepository, DeliveryRepository deliveryRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.restaurantRepository = restaurantRepository;
         this.menuItemRepository = menuItemRepository;
         this.orderItemRepository = orderItemRepository;
-        this.corporateOrderRepository = corporateOrderRepository;
+        this.deliveryRepository = deliveryRepository;
     }
 
     //create Order if there is no notes
@@ -324,5 +326,30 @@ public class OrderService {
 
         return orderRepository.findCustomerOrders(customerId, status, from, to, pageable)
                 .map(FoodOrderResponseDTO::fromEntity);
+    }
+
+    //Estimated delivery time based on driver location and distance
+    public ETAResponseDTO getEstimatedDeliveryTime(Integer orderId){
+        Delivery delivery = deliveryRepository.findByOrderId(orderId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Delivery not found"));
+
+        DeliveryDriver driver = delivery.getDriver();
+
+        Customer customer = customerRepository.findByOrderId(orderId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Customer not found"));
+
+        if (driver.getCurrentLat() == null || customer.getLatitude() == null) {
+            throw new ResourceNotFoundException("Location data missing");
+        }
+
+        double distance = HelperUtils.calculateDistance(
+                        driver.getCurrentLat(), driver.getCurrentLng(),
+                        customer.getLatitude(), customer.getLongitude());
+
+        int estimatedMinutes = (int) Math.round((distance / 40.0) * 60);
+
+        return new ETAResponseDTO(orderId, distance, estimatedMinutes);
     }
 }
