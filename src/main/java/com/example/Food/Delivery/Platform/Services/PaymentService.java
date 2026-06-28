@@ -1,6 +1,8 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.response.PaymentAnalyticsDTO;
 import com.example.Food.Delivery.Platform.DTO.response.PaymentResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.summary.PaymentSummaryDTO;
 import com.example.Food.Delivery.Platform.Entities.FoodOrder;
 import com.example.Food.Delivery.Platform.Entities.Payment;
 import com.example.Food.Delivery.Platform.Exceptions.ResourceNotFoundException;
@@ -8,9 +10,12 @@ import com.example.Food.Delivery.Platform.Repositories.OrderRepository;
 import com.example.Food.Delivery.Platform.Repositories.PaymentRepository;
 import com.example.Food.Delivery.Platform.Utils.HelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PaymentService {
@@ -83,4 +88,23 @@ public class PaymentService {
         return PaymentResponseDTO.fromEntity(payment);
     }
 
+    //get payments
+    public List<PaymentSummaryDTO> getPayments(
+            String method,
+            String status,
+            LocalDateTime from,
+            LocalDateTime to,
+            Pageable pageable) {
+        return paymentRepository.filterPayments(method, status, from, to, pageable)
+                .map(PaymentSummaryDTO::fromEntity).toList();
+    }
+
+    //Analytics by payment method
+    public List<PaymentAnalyticsDTO> getAnalyticsByMethod() {
+        return paymentRepository.getTotalByMethod().stream()
+                .map(obj -> new PaymentAnalyticsDTO(
+                        (String) obj[0],
+                        ((Number) obj[1]).doubleValue()
+                )).toList();
+    }
 }
