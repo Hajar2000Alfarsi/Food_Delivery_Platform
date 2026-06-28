@@ -3,10 +3,7 @@ package com.example.Food.Delivery.Platform.Services;
 import com.example.Food.Delivery.Platform.DTO.request.ComboMealRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.MenuItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
-import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
-import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
-import com.example.Food.Delivery.Platform.DTO.response.RestaurantAnalyticsDTO;
-import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.*;
 import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
 import com.example.Food.Delivery.Platform.Entities.ComboMeal;
@@ -29,18 +26,19 @@ public class RestaurantService {
     private final ComboMealRepository comboMealRepository;
     private final RestaurantOwnerRepository ownerRepository;
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ReviewRepository reviewRepository;
 
     @Autowired
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, ComboMealRepository comboMealRepository, RestaurantOwnerRepository ownerRepository, OrderRepository orderRepository, ReviewRepository reviewRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository, ComboMealRepository comboMealRepository, RestaurantOwnerRepository ownerRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, ReviewRepository reviewRepository) {
         this.restaurantRepository = restaurantRepository;
         this.menuItemRepository = menuItemRepository;
         this.comboMealRepository = comboMealRepository;
         this.ownerRepository = ownerRepository;
         this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
         this.reviewRepository = reviewRepository;
     }
-
 
     //Create Restaurant
     public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO dto, Integer ownerId) {
@@ -229,4 +227,17 @@ public class RestaurantService {
                 revenue != null ? revenue : 0.0);
     }
 
+    //Best-selling MenuItems for a restaurant
+    public List<TopSellingMenuItemDTO> getTopSellingMenuItems(Integer restaurantId) {
+
+        restaurantRepository.findByActiveId(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
+
+        return orderItemRepository.getTopSellingItems(restaurantId).stream()
+                .map(obj -> new TopSellingMenuItemDTO(
+                        (Integer) obj[0],
+                        (String) obj[1],
+                        (long) obj[2]
+                )).toList();
+    }
 }

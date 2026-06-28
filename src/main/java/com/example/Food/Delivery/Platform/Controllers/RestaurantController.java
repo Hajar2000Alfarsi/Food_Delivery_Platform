@@ -3,10 +3,7 @@ package com.example.Food.Delivery.Platform.Controllers;
 import com.example.Food.Delivery.Platform.DTO.request.ComboMealRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.MenuItemRequestDTO;
 import com.example.Food.Delivery.Platform.DTO.request.RestaurantRequestDTO;
-import com.example.Food.Delivery.Platform.DTO.response.ComboMealResponseDTO;
-import com.example.Food.Delivery.Platform.DTO.response.MenuItemResponseDTO;
-import com.example.Food.Delivery.Platform.DTO.response.RestaurantAnalyticsDTO;
-import com.example.Food.Delivery.Platform.DTO.response.RestaurantResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.*;
 import com.example.Food.Delivery.Platform.DTO.summary.MenuItemSummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.summary.RestaurantSummaryDTO;
 import com.example.Food.Delivery.Platform.Entities.Restaurant;
@@ -122,9 +119,17 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getNearbyRestaurants(lat, lng, radiusKm));
     }
 
+    //Average rating, total revenue, total completed orders(Restaurant Analytics)
     @GetMapping("/{id}/analytics")
     public ResponseEntity<RestaurantAnalyticsDTO> getAnalytics(@PathVariable Integer id) {
 
         return ResponseEntity.ok(restaurantService.getRestaurantAnalytics(id));
+    }
+
+    //Best-selling MenuItems for a restaurant
+    @GetMapping("/{id}/menu/top-sellers")
+    public ResponseEntity<List<TopSellingMenuItemDTO>> getTopSellingItems(@PathVariable Integer id) {
+
+        return ResponseEntity.ok(restaurantService.getTopSellingMenuItems(id));
     }
 }
