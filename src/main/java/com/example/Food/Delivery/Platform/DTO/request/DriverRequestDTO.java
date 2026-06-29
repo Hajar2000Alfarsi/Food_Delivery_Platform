@@ -4,6 +4,7 @@ import com.example.Food.Delivery.Platform.Entities.Customer;
 import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +37,12 @@ public class DriverRequestDTO {
     @NotBlank(message = "Vehicle plate number is required")
     private String vehiclePlate;
 
+    @NotNull(message = "Latitude is required")
+    private Double latitude;
+
+    @NotNull(message = "Longitude is required")
+    private Double longitude;
+
     public DeliveryDriver toEntity(){
         DeliveryDriver driver = new DeliveryDriver();
         driver.setFirstName(firstName);
@@ -45,7 +52,8 @@ public class DriverRequestDTO {
         driver.setPasswordHash(password);
         driver.setVehicleType(vehicleType);
         driver.setVehiclePlate(vehiclePlate);
-
+        driver.setCurrentLat(latitude);
+        driver.setCurrentLng(longitude);
         return driver;
     }
 }

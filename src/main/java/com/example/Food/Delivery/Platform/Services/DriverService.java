@@ -35,6 +35,8 @@ public class DriverService {
         driver.setDriverCode(driverCode);
 
         driver.setIsOnline(false);
+        driver.setCurrentLat(dto.getLatitude());
+        driver.setCurrentLng(dto.getLongitude());
         driver.setCreatedDate(LocalDateTime.now());
         driver.setUpdatedDate(LocalDateTime.now());
         driver.setIsActive(true);
