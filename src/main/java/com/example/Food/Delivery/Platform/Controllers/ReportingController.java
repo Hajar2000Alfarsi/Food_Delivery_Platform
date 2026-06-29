@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
+import com.example.Food.Delivery.Platform.DTO.response.BusiestHourDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CancellationRateDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverEarningsDTO;
@@ -92,5 +93,11 @@ public class ReportingController {
             @RequestParam LocalDateTime from,
             @RequestParam LocalDateTime to){
         return ResponseEntity.ok((reportingService.getCancellationRate(from, to)));
+    }
+
+    //Busiest Hours Report
+    @GetMapping("/platform/busiest-hours")
+    public ResponseEntity<List<BusiestHourDTO>> getBusiestHoursReport(){
+        return ResponseEntity.ok(reportingService.getBusiestHours());
     }
 }

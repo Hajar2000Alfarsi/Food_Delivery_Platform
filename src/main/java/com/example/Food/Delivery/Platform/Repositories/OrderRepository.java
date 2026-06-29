@@ -53,4 +53,8 @@ public interface OrderRepository extends JpaRepository<FoodOrder, Integer> {
 
     @Query("SELECT COUNT(o) FROM FoodOrder o WHERE o.status='CANCELLED' AND o.orderDate BETWEEN :from AND :to AND o.isActive=true")
     Long countCancelled(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    @Query("SELECT FUNCTION('HOUR', o.orderDate), COUNT(o) FROM FoodOrder o WHERE o.isActive=true " +
+            "GROUP BY FUNCTION('HOUR', o.orderDate) ORDER BY FUNCTION('HOUR', o.orderDate)")
+    List<Object[]> getBusiestHours();
 }

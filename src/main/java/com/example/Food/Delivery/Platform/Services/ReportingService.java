@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.response.BusiestHourDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CancellationRateDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverEarningsDTO;
@@ -151,5 +152,17 @@ public class ReportingService {
         }
 
         return new CancellationRateDTO(completed, cancelled, rate);
+    }
+
+    //Busiest Hours Report
+    public List<BusiestHourDTO> getBusiestHours() {
+
+        return orderRepository.getBusiestHours()
+                .stream()
+                .map(obj -> new BusiestHourDTO(
+                        ((Number) obj[0]).intValue(),
+                        ((Number) obj[1]).longValue()
+                ))
+                .toList();
     }
 }
