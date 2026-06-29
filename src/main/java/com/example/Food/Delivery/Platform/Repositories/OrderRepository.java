@@ -47,4 +47,10 @@ public interface OrderRepository extends JpaRepository<FoodOrder, Integer> {
             @Param("restaurantId") Integer restaurantId,
             @Param("from") LocalDateTime from,
             @Param("to") LocalDateTime to);
+
+    @Query("SELECT COUNT(o) FROM FoodOrder o WHERE o.status='DELIVERED' AND o.orderDate BETWEEN :from AND :to AND o.isActive=true")
+    Long countCompleted(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    @Query("SELECT COUNT(o) FROM FoodOrder o WHERE o.status='CANCELLED' AND o.orderDate BETWEEN :from AND :to AND o.isActive=true")
+    Long countCancelled(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 }

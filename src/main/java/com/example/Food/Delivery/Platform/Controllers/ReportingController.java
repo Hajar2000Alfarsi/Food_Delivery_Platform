@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
+import com.example.Food.Delivery.Platform.DTO.response.CancellationRateDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverEarningsDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DailySummaryDTO;
@@ -85,5 +86,11 @@ public class ReportingController {
         return ResponseEntity.ok(reportingService.getDriverEarnings(driverId, from, to));
     }
 
-
+    //Cancellation Rate Report
+    @GetMapping("/orders/cancellation-rate")
+    public ResponseEntity<CancellationRateDTO> getCancellationRateReport(
+            @RequestParam LocalDateTime from,
+            @RequestParam LocalDateTime to){
+        return ResponseEntity.ok((reportingService.getCancellationRate(from, to)));
+    }
 }

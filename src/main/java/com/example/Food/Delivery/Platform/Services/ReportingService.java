@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.response.CancellationRateDTO;
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
 import com.example.Food.Delivery.Platform.DTO.response.DriverEarningsDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DailySummaryDTO;
@@ -138,5 +139,17 @@ public class ReportingService {
     }
 
     //Cancellation Rate Report
+    public CancellationRateDTO getCancellationRate(LocalDateTime from, LocalDateTime to) {
 
+        long completed = orderRepository.countCompleted(from, to);
+        long cancelled = orderRepository.countCancelled(from, to);
+
+        double rate = 0;
+
+        if (completed + cancelled > 0) {
+            rate = (cancelled * 100.0) / (completed + cancelled);
+        }
+
+        return new CancellationRateDTO(completed, cancelled, rate);
+    }
 }
