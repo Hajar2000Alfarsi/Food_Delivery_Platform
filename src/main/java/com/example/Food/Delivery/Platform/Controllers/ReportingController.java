@@ -1,6 +1,7 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.DriverEarningsDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DailySummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DriverLeaderboardDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
@@ -75,5 +76,14 @@ public class ReportingController {
         return ResponseEntity.ok(reportingService.getRestaurantRevenue(restaurantId, from, to));
     }*/
 
-    //Driver earnings report over a date range
+    //Driver Earnings Report
+    @GetMapping("/drivers/{driverId}/earnings")
+    public ResponseEntity<DriverEarningsDTO> getDriverEarningsRevenue(
+            @PathVariable Integer driverId,
+            @RequestParam LocalDateTime from,
+            @RequestParam LocalDateTime to) {
+        return ResponseEntity.ok(reportingService.getDriverEarnings(driverId, from, to));
+    }
+
+
 }

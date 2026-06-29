@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +35,10 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
 
     @Query("select d from Delivery d where d.driver.id = :driverId AND d.status = 'DELIVERED' AND d.isActive = true")
     List<Delivery> findDeliveredByDriver(@Param("driverId") Integer driverId);
+
+    @Query("SELECT d FROM Delivery d WHERE d.driver.id = :driverId AND d.status = 'DELIVERED' AND d.deliveredAt BETWEEN :from AND :to AND d.isActive = true")
+    List<Delivery> findDeliveredBetween(
+            @Param("driverId") Integer driverId,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to);
 }

@@ -1,10 +1,12 @@
 package com.example.Food.Delivery.Platform.Services;
 
 import com.example.Food.Delivery.Platform.DTO.response.CustomerResponseDTO;
+import com.example.Food.Delivery.Platform.DTO.response.DriverEarningsDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DailySummaryDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.DriverLeaderboardDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.OrderCountDTO;
 import com.example.Food.Delivery.Platform.DTO.response.report.RevenueReportDTO;
+import com.example.Food.Delivery.Platform.Entities.Delivery;
 import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
 import com.example.Food.Delivery.Platform.Entities.FoodOrder;
 import com.example.Food.Delivery.Platform.Repositories.CustomerRepository;
@@ -122,5 +124,19 @@ public class ReportingService {
         return new RevenueReportDTO(restaurantId, revenue);
     }*/
 
+    //Driver Earnings Report
+    public DriverEarningsDTO getDriverEarnings(Integer driverId, LocalDateTime from, LocalDateTime to) {
+        List<Delivery> deliveries = deliveryRepository.findDeliveredBetween(driverId, from, to);
+
+        long count = deliveries.size();
+
+        double earnings = deliveries.stream()
+                .mapToDouble(d -> d.getOrder().getDeliveryFee())
+                .sum();
+
+        return new DriverEarningsDTO(driverId, count, earnings);
+    }
+
+    //Cancellation Rate Report
 
 }
