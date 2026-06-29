@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RevenueReportDTO {
     private Integer restaurantId;
-    private String date;
     private Double revenue;
 
 }

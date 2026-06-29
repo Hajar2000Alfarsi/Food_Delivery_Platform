@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,18 +34,35 @@ public class ReportingService {
     }
 
     //Revenue for restaurant
-    public RevenueReportDTO getRestaurantRevenue(Integer restaurantId, LocalDate date) {
-                                                                //start             , end
-        double revenue = orderRepository.findByOrderDateBetween(date.atStartOfDay(), date.plusDays(1).atStartOfDay())
-                .stream()
-                .filter(o -> o.getRestaurant() != null
-                        && o.getRestaurant().getId().equals(restaurantId))
-                .map(FoodOrder::getTotalAmount)
-                .filter(Objects::nonNull)
-                .mapToDouble(Double::doubleValue)
-                .sum();
+    public RevenueReportDTO getRestaurantRevenue(
+            Integer restaurantId,
+            LocalDate date,
+            LocalDateTime from,
+            LocalDateTime to) {
+        double revenue = 0.0;
 
-        return new RevenueReportDTO(restaurantId, date.toString(), revenue);
+        //case 1: daily report
+        if (date != null){
+                                                            //start             , end
+            revenue = orderRepository.findByOrderDateBetween(date.atStartOfDay(), date.plusDays(1).atStartOfDay())
+                    .stream()
+                    .filter(o -> o.getRestaurant() != null
+                            && o.getRestaurant().getId().equals(restaurantId))
+                    .map(FoodOrder::getTotalAmount)
+                    .filter(Objects::nonNull)
+                    .mapToDouble(Double::doubleValue)
+                    .sum();
+        }
+        //case 2: date range report
+        else if (from != null && to != null) {
+            revenue = orderRepository.getRevenueBetweenDates(restaurantId, from, to);
+        }
+        //case 3: no filter -> total revenue
+        else {
+
+            revenue = orderRepository.getTotalRevenue(restaurantId);
+        }
+        return new RevenueReportDTO(restaurantId, revenue);
     }
 
     //Total orders
@@ -93,5 +111,16 @@ public class ReportingService {
 
         return new DailySummaryDTO(date.toString(), totalOrders, fees);
     }
+
+    //Restaurant Revenue
+    /*public RevenueReportDTO getRestaurantRevenue(
+            Integer restaurantId,
+            LocalDateTime from,
+            LocalDateTime to) {
+        Double revenue = orderRepository.getRevenueBetweenDates(restaurantId, from, to);
+
+        return new RevenueReportDTO(restaurantId, revenue);
+    }*/
+
 
 }

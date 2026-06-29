@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,9 +29,11 @@ public class ReportingController {
     @GetMapping("/revenue/restaurant/{restaurantId}")
     public ResponseEntity<RevenueReportDTO> revenue(
             @PathVariable Integer restaurantId,
-            @RequestParam LocalDate date) {
+            @RequestParam(required = false) LocalDate date,
+            @RequestParam(required = false) LocalDateTime from,
+            @RequestParam(required = false) LocalDateTime to) {
 
-        return ResponseEntity.ok(reportingService.getRestaurantRevenue(restaurantId, date));
+        return ResponseEntity.ok(reportingService.getRestaurantRevenue(restaurantId, date, from, to));
     }
 
     //Total orders
@@ -61,4 +64,16 @@ public class ReportingController {
 
         return ResponseEntity.ok(reportingService.getDailySummary(date));
     }
+
+    //Restaurant Revenue
+    /*@GetMapping("/revenue/restaurant/{restaurantId}")
+    public ResponseEntity<RevenueReportDTO> getRevenue(
+            @PathVariable Integer restaurantId,
+            @RequestParam LocalDateTime from,
+            @RequestParam LocalDateTime to) {
+
+        return ResponseEntity.ok(reportingService.getRestaurantRevenue(restaurantId, from, to));
+    }*/
+
+    //Driver earnings report over a date range
 }

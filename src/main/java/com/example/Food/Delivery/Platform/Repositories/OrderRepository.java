@@ -42,5 +42,9 @@ public interface OrderRepository extends JpaRepository<FoodOrder, Integer> {
     @Query("select sum(o.totalAmount) from FoodOrder o where o.restaurant.id = :restaurantId AND o.status = 'DELIVERED' AND o.isActive = true")
     Double getTotalRevenue(@Param("restaurantId") Integer restaurantId);
 
-
+    @Query("SELECT COALESCE(SUM(o.totalAmount),0) FROM FoodOrder o WHERE o.restaurant.id = :restaurantId AND o.status = 'DELIVERED' AND o.orderDate BETWEEN :from AND :to AND o.isActive = true")
+    Double getRevenueBetweenDates(
+            @Param("restaurantId") Integer restaurantId,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to);
 }
