@@ -1,9 +1,11 @@
 package com.example.Food.Delivery.Platform.Controllers;
 
 import com.example.Food.Delivery.Platform.DTO.request.ReviewRequestDTO;
+import com.example.Food.Delivery.Platform.DTO.response.AverageRatingDTO;
 import com.example.Food.Delivery.Platform.DTO.response.ReviewResponseDTO;
 import com.example.Food.Delivery.Platform.Services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +47,12 @@ public class ReviewController {
 
     //RESTAURANT REVIEWS
     @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<List<ReviewResponseDTO>> getRestaurantReviews(@PathVariable Integer restaurantId) {
+    public ResponseEntity<Page<ReviewResponseDTO>> getRestaurantReviews(
+            @PathVariable Integer restaurantId,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
 
-        return ResponseEntity.ok(reviewService.getRestaurantReviews(restaurantId));
+        return ResponseEntity.ok(reviewService.getRestaurantReviews(restaurantId,page,size));
     }
 
     //DRIVER REVIEWS
@@ -65,4 +70,27 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
+    //Average for Restaurant
+    @GetMapping("/restaurant/{restaurantId}/average")
+    public ResponseEntity<AverageRatingDTO> getRestaurantAverage(@PathVariable Integer restaurantId){
+
+        return ResponseEntity.ok(reviewService.getRestaurantAverage(restaurantId));
+    }
+
+    //Average for Driver
+    @GetMapping("/driver/{driverId}/average")
+    public ResponseEntity<AverageRatingDTO> getDriverAverage(@PathVariable Integer driverId){
+
+        return ResponseEntity.ok(reviewService.getDriverAverage(driverId));
+    }
+
+    //Restaurant Reviews
+    /*@GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<Page<ReviewResponseDTO>> getRestaurantReviews(
+            @PathVariable Integer restaurantId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+
+        return ResponseEntity.ok(reviewService.getRestaurantReviews(restaurantId, page, size));
+    }*/
 }

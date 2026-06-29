@@ -1,5 +1,6 @@
 package com.example.Food.Delivery.Platform.Services;
 
+import com.example.Food.Delivery.Platform.DTO.response.AverageRatingDTO;
 import com.example.Food.Delivery.Platform.DTO.response.ReviewResponseDTO;
 import com.example.Food.Delivery.Platform.Entities.Customer;
 import com.example.Food.Delivery.Platform.Entities.DeliveryDriver;
@@ -11,6 +12,9 @@ import com.example.Food.Delivery.Platform.Repositories.DriverRepository;
 import com.example.Food.Delivery.Platform.Repositories.RestaurantRepository;
 import com.example.Food.Delivery.Platform.Repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -75,12 +79,19 @@ public class ReviewService {
     }
 
     //GET RESTAURANT REVIEWS
-    public List<ReviewResponseDTO> getRestaurantReviews(Integer restaurantId) {
+    public Page<ReviewResponseDTO> getRestaurantReviews(Integer restaurantId, Integer page, Integer size) {
+        restaurantRepository.findByActiveId(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
 
-        return reviewRepository.findByRestaurantId(restaurantId)
-                .stream()
-                .map(ReviewResponseDTO::fromEntity)
-                .toList();
+        if (page == null || size == null) {
+            page = 0;
+            size = Integer.MAX_VALUE; // return all values
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return reviewRepository.getRestaurantReviews(restaurantId, pageable)
+                .map(ReviewResponseDTO::fromEntity);
     }
 
     //GET DRIVER REVIEWS
@@ -103,4 +114,46 @@ public class ReviewService {
 
         reviewRepository.save(review);
     }
+
+    //Average for Restaurant
+    public AverageRatingDTO getRestaurantAverage(Integer restaurantId) {
+        restaurantRepository.findByActiveId(restaurantId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Restaurant not found"));
+
+        Double avg = reviewRepository.getRestaurantAverage(restaurantId);
+
+        if (avg == null) {
+            avg = 0.0;
+        }
+
+        return new AverageRatingDTO(avg);
+    }
+
+    //Average for Driver
+    public AverageRatingDTO getDriverAverage(Integer driverId){
+        driverRepository.findByActiveID(driverId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Driver not found"));
+
+        Double avg = reviewRepository.getDriverAverage(driverId);
+
+        if (avg == null){
+            avg = 0.0;
+        }
+
+        return new AverageRatingDTO(avg);
+    }
+
+    //Restaurant Reviews
+    /*public Page<ReviewResponseDTO> getRestaurantReviews(Integer restaurantId, int page, int size){
+        restaurantRepository.findByActiveId(restaurantId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Restaurant not found"));
+
+        Pageable pageable = PageRequest.of(page,size);
+
+        return reviewRepository.getRestaurantReviews(restaurantId, pageable)
+                .map(ReviewResponseDTO::fromEntity);
+    }*/
 }
