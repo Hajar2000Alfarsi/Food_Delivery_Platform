@@ -248,4 +248,12 @@ public class RestaurantService {
                 .toList();
     }
 
+    // Search restaurants by name
+    public List<RestaurantResponseDTO> searchRestaurantsByName(String keyword) {
+
+        return restaurantRepository.searchByName(keyword)
+                .stream()
+                .map(RestaurantResponseDTO::fromEntity)
+                .toList();
+    }
     }

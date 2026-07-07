@@ -34,4 +34,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     @Query("select r from Restaurant r where r.id = :id AND r.isActive = true")
     Optional<RestaurantResponseDTO> findByActiveIdDTO(@Param("id") Integer id);
+
 }
