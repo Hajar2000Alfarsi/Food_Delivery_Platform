@@ -138,4 +138,10 @@ public class OrderController {
 
         return ResponseEntity.ok(orderService.getEstimatedDeliveryTime(id));
     }
+
+    //timeline
+    @GetMapping("/{id}/timeline")
+    public ResponseEntity<List<String>> getOrderTimeline(@PathVariable Integer id) {
+        return ResponseEntity.ok(orderService.getOrderTimeline(id));
+    }
 }

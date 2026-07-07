@@ -352,4 +352,39 @@ public class OrderService {
 
         return new ETAResponseDTO(orderId, distance, estimatedMinutes);
     }
+
+    public List<String> getOrderTimeline(Integer orderId) {
+
+        FoodOrder order = orderRepository.findByActiveId(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+
+        List<String> timeline = new ArrayList<>();
+
+        timeline.add("Order Created : " + order.getCreatedDate());
+
+        switch (order.getStatus()) {
+
+            case "CONFIRMED":
+                timeline.add("Order Confirmed");
+                break;
+
+            case "PAID":
+                timeline.add("Payment Completed");
+                break;
+
+            case "ON_THE_WAY":
+                timeline.add("Driver Picked Up Order");
+                break;
+
+            case "DELIVERED":
+                timeline.add("Order Delivered");
+                break;
+
+            case "CANCELLED":
+                timeline.add("Order Cancelled");
+                break;
+        }
+
+        return timeline;
+    }
 }
