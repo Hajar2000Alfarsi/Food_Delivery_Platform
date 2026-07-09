@@ -104,16 +104,42 @@ public class ReportingService {
     // Daily summary
     public DailySummaryDTO getDailySummary(LocalDate date) {
 
-        List<FoodOrder> orders = orderRepository.findByOrderDateBetween(date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+        List<FoodOrder> orders =
+                orderRepository.findByOrderDateBetween(
+                        date.atStartOfDay(),
+                        date.plusDays(1).atStartOfDay());
 
-        //total number of orders
         long totalOrders = orders.size();
 
-        double fees = orders.stream()
-                .mapToDouble(o -> o.getDeliveryFee() == null ? 0.0 : o.getDeliveryFee())
+        double revenue = orders.stream()
+                .map(FoodOrder::getTotalAmount)
+                .filter(Objects::nonNull)
+                .mapToDouble(Double::doubleValue)
                 .sum();
 
-        return new DailySummaryDTO(date.toString(), totalOrders, fees);
+        double deliveryFees = orders.stream()
+                .map(FoodOrder::getDeliveryFee)
+                .filter(Objects::nonNull)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+
+        double averageOrderValue =
+                totalOrders > 0 ? revenue / totalOrders : 0;
+
+        long cancelledOrders = orders.stream()
+                .filter(o -> "CANCELLED".equalsIgnoreCase(o.getStatus()))
+                .count();
+
+        double cancellationRate = totalOrders > 0 ? (cancelledOrders * 100.0) / totalOrders : 0;
+
+        return new DailySummaryDTO(
+                date.toString(),
+                totalOrders,
+                revenue,
+                averageOrderValue,
+                cancellationRate,
+                deliveryFees
+        );
     }
 
     //Restaurant Revenue

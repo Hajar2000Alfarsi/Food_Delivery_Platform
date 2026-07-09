@@ -9,6 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DailySummaryDTO {
     private String date;
+
     private Long totalOrders;
+
+    private Double totalRevenue;
+
+    private Double averageOrderValue;
+
+    private Double cancellationRate;
+
     private Double totalDeliveryFees;
 }
